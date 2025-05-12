@@ -1,30 +1,39 @@
 extends CharacterBody3D
 
-
-var speed = WALK_SPEED
+# --- Movement Constants ---
 const WALK_SPEED = 4.5
 const SPRINT_SPEED = 7.0
 const CROUCH_SPEED = 2.25
-const JUMP_VELOCITY = 6
+const JUMP_VELOCITY = 4.5
 const GRAVITY = 9.8
+
+# --- Camera & Mouse Constants ---
 const SENS_RATIO = 0.001
 const SENSITIVITY = SENS_RATIO * 3
-const BOB_FREQUENCY = 2.0
-const BOB_AMPLITUDE = 0.06
-var t_bob = 0.0
+
+# --- Head Bobbing Constants ---
+const BOB_FREQUENCY = 1.0
+const BOB_AMPLITUDE = 0.04
+
+# --- Crouch/Stand Heights ---
 const CROUCH_HEIGHT = 1.0
 const STAND_HEIGHT = 1.8
 
+# --- Camera FOV Constants ---
 const BASE_FOV = 75.0
 const SPRINT_FOV = 90.0
 const CROUCH_FOV = 60.0
 
+# --- State Variables ---
+var speed = WALK_SPEED
+var t_bob = 0.0
+var footstep_timer = 0.0
+var current_footstep_interval = 0.5
+
+# --- Node References ---
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var footstep_player = $Footsteps
-
-var footstep_timer = 0.0
-const FOOTSTEP_INTERVAL = 0.5
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -58,18 +67,10 @@ func _physics_process(delta: float) -> void:
 
 	# Handle crouch toggle
 	if Input.is_action_just_pressed("crouch"):
-		if speed == WALK_SPEED:
+		if speed == WALK_SPEED or speed == SPRINT_SPEED:
 			speed = CROUCH_SPEED
 		else:
 			speed = WALK_SPEED
-
-	# Handle head position when crouching.
-	# if speed == CROUCH_SPEED:
-	# 	head.position.y = CROUCH_HEIGHT
-	# 	camera.position.y = CROUCH_HEIGHT
-	# else:
-	# 	head.position.y = STAND_HEIGHT
-	# 	camera.position.y = STAND_HEIGHT
 
 	# Handle head position when crouching, smoothly interpolate.
 	var target_height = CROUCH_HEIGHT if speed == CROUCH_SPEED else STAND_HEIGHT
@@ -97,20 +98,6 @@ func _physics_process(delta: float) -> void:
 
 	camera.fov = lerpf(camera.fov, (SPRINT_FOV if Input.is_action_pressed("sprint") else BASE_FOV), delta * 10.0)
 	camera.fov = lerpf(camera.fov, (CROUCH_FOV if speed == CROUCH_SPEED else BASE_FOV), delta * 8.0)
-
-	# Handle footstep sounds.
-	if is_on_floor() and velocity.length() > 0.1:
-		footstep_timer -= delta
-		if footstep_timer <= 0.0:
-			if not footstep_player.is_playing():
-				# Play footstep sound.
-				footstep_player.play()
-			else:
-				# If the sound is already playing, just reset the timer.
-				footstep_timer = FOOTSTEP_INTERVAL
-	else:
-		footstep_player.stop()
-		footstep_timer = 0.0
 
 	move_and_slide()
 

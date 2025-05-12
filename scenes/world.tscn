@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://d4b6bgok5w8nj"]
+[gd_scene load_steps=13 format=3 uid="uid://d4b6bgok5w8nj"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_dccl0"]
 [ext_resource type="Material" uid="uid://bbxa5a0gq3bfv" path="res://resources/materials/grey_material.tres" id="2_3taea"]
-[ext_resource type="AudioStream" uid="uid://yqjcsot26i5k" path="res://scenes/BT0AAD0.WAV" id="2_i0x2f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_e4egk"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -57,6 +56,7 @@ script = ExtResource("1_dccl0")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0.972551, -0.0186768)
+visible = false
 mesh = SubResource("CapsuleMesh_n7k5u")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
@@ -68,9 +68,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00163198, 1.85486, 0.006473
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head"]
 fov = 80.0
-
-[node name="Footsteps" type="AudioStreamPlayer" parent="Player"]
-stream = ExtResource("2_i0x2f")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.22848, -0.119692, -6.08873)
