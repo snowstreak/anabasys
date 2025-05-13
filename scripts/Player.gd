@@ -61,7 +61,7 @@ func _physics_process(delta: float) -> void:
 	# Handle sprinting.
 	if Input.is_action_pressed("sprint"):
 		speed = SPRINT_SPEED
-	else: if Input.is_action_just_released("sprint"):
+	elif Input.is_action_just_released("sprint"):
 		# Reset speed to walking speed if sprint is released.
 		speed = WALK_SPEED
 

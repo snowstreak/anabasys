@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://cq8dyhwmusy86"]
+
+[ext_resource type="PackedScene" uid="uid://dlat12nk6w0pr" path="res://resources/models/player_model.glb" id="1_cy51a"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rcqfr"]
+
+[node name="player_model" instance=ExtResource("1_cy51a")]
+mesh = SubResource("ArrayMesh_rcqfr")
