@@ -34,6 +34,7 @@ var current_footstep_interval = 0.5
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var footstep_player = $Footsteps
+@onready var knife = $Head/Camera3D/Knife
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=18 format=4 uid="uid://d4b6bgok5w8nj"]
+[gd_scene load_steps=19 format=4 uid="uid://d4b6bgok5w8nj"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_dccl0"]
 [ext_resource type="Material" uid="uid://bbxa5a0gq3bfv" path="res://resources/materials/grey_material.tres" id="2_3taea"]
+[ext_resource type="PackedScene" uid="uid://csfspgqh5vafq" path="res://resources/models/chrysalis_knife.glb" id="2_jfxwd"]
 [ext_resource type="Texture2D" uid="uid://bvcojbvcnhwte" path="res://resources/textures/shadow.png" id="2_rt1w7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_e4egk"]
@@ -54,15 +55,16 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_pgdpv")
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_pdski"]
-points = PackedVector3Array(0.38977, 1.28859, 0.012947, -0.384567, 0.140536, -0.0931332, -0.356379, 0.143097, -0.171741, 0.334901, -0.000912776, 0.0933482, -0.0933281, 1.25413, 0.384375, -0.0931318, 1.25296, -0.384561, 0.170921, 0.142516, -0.356753, 0.0129476, 0.104885, 0.389788, -0.339021, 1.40073, -0.0681582, -0.328811, 0.145152, 0.222748, -0.0970896, -0.187047, -0.0694926, 0.278189, 1.28068, 0.278189, 0.123459, 1.57893, -0.0142732, 0.32791, 1.24851, -0.223816, -0.356747, 1.25098, 0.170918, -0.0931321, 0.140543, -0.384562, 0.356089, 0.141993, -0.172083, 0.328378, 0.1442, 0.223134, -0.0955329, 1.51166, 0.230448, -0.278499, 1.27923, -0.278499, 0.0921907, 1.25331, -0.384805, -0.0960845, 1.54378, -0.178014, -0.0961348, -0.150729, 0.177107, 0.148318, -0.115493, -0.203587, 0.118275, 1.17202, 0.38252, -0.223819, 0.144978, 0.327914, 0.14841, -0.115997, 0.202713, -0.384557, 1.25295, -0.0931307, 0.223132, 0.144203, 0.328376, 0.38252, 0.221484, 0.118275, 0.202399, 1.45417, -0.230432, -0.384811, 0.140182, 0.0921921)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_73vyo"]
 transparency = 1
 blend_mode = 4
 albedo_texture = ExtResource("2_rt1w7")
 
 [sub_resource type="QuadMesh" id="QuadMesh_irvff"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7wn46"]
+radius = 0.36
+height = 1.8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3sgmi"]
 albedo_color = Color(0.0403187, 0.71479, 0.879905, 1)
@@ -95,25 +97,29 @@ material = SubResource("StandardMaterial3D_8tvvd")
 script = ExtResource("1_dccl0")
 
 [node name="Head" type="Node3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00163198, 1.29791, 0.00647306)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00163198, 1.39791, 0.00647306)
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head"]
 fov = 80.0
 
-[node name="Sphere" type="MeshInstance3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.440399, 0)
+[node name="Knife" parent="Player/Head/Camera3D" instance=ExtResource("2_jfxwd")]
+transform = Transform3D(0.275499, 0.308834, -0.910341, 0.73341, 0.544678, 0.406737, 0.621457, -0.779709, -0.0764435, 0.119088, -0.0980345, -0.15844)
+
+[node name="PlayerApproximateCollision" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.128379, 0)
 visible = false
 mesh = SubResource("ArrayMesh_xw8s7")
 skeleton = NodePath("")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.105694, 0)
-shape = SubResource("ConvexPolygonShape3D_pdski")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 0.66438, 0, -1, -2.9041e-08, 0, -0.286902, 0)
+[node name="Shadow" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 0.66438, 0, -1, -2.9041e-08, 0.00640106, -0.282441, 0.00562191)
+visible = false
 material_override = SubResource("StandardMaterial3D_73vyo")
 mesh = SubResource("QuadMesh_irvff")
+
+[node name="PlayerCollision" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("CapsuleShape3D_7wn46")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.22848, -0.119692, -6.08873)
