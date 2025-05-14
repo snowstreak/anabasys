@@ -20,8 +20,8 @@ nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
 meshes/ensure_tangents=true
 meshes/generate_lods=true
-meshes/create_shadow_meshes=true
-meshes/light_baking=1
+meshes/create_shadow_meshes=false
+meshes/light_baking=0
 meshes/lightmap_texel_size=0.2
 meshes/force_disable_compression=false
 skins/use_named_skins=true
@@ -31,6 +31,33 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={}
+_subresources={
+"nodes": {
+"PATH:Empty/blade": {
+"mesh_instance/cast_shadow": 0
+},
+"PATH:Empty/bottom_notch": {
+"mesh_instance/cast_shadow": 0
+},
+"PATH:Empty/eye_white": {
+"mesh_instance/cast_shadow": 0
+},
+"PATH:Empty/handle_peg1": {
+"mesh_instance/cast_shadow": 0
+},
+"PATH:Empty/handle_peg2": {
+"mesh_instance/cast_shadow": 0
+},
+"PATH:Empty/handles": {
+"mesh_instance/cast_shadow": 0
+},
+"PATH:Empty/metal_thing": {
+"mesh_instance/cast_shadow": 0
+},
+"PATH:Empty/pupil": {
+"mesh_instance/cast_shadow": 0
+}
+}
+}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

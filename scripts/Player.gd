@@ -15,9 +15,13 @@ const SENSITIVITY = SENS_RATIO * 3
 const BOB_FREQUENCY = 1.0
 const BOB_AMPLITUDE = 0.04
 
+# --- Weapon Sway Constants ---
+const SWAY_IDLE_FREQ = 0.75
+const SWAY_IDLE_AMP = 0.02
+#ai
 # --- Crouch/Stand Heights ---
-const CROUCH_HEIGHT = 1.0
-const STAND_HEIGHT = 1.8
+const CROUCH_HEIGHT = 1.1
+const STAND_HEIGHT = 1.75
 
 # --- Camera FOV Constants ---
 const BASE_FOV = 75.0
@@ -27,24 +31,28 @@ const CROUCH_FOV = 60.0
 # --- State Variables ---
 var speed = WALK_SPEED
 var t_bob = 0.0
-var footstep_timer = 0.0
-var current_footstep_interval = 0.5
+var t_sway = 0.0
+var t_sway_time = 0.0
+var knife_base_pos = Vector3.ZERO
+# var footstep_timer = 0.0
+# var current_footstep_interval = 0.5
 
 # --- Node References ---
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
-@onready var footstep_player = $Footsteps
 @onready var knife = $Head/Camera3D/Knife
+@onready var shadow = $Shadow
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	knife_base_pos = knife.position
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		# Rotate the head and camera based on mouse movement.
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
-		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -80, 80)
+		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
 
 	# Handle input for exiting the game.
 	if event.is_action_pressed("ui_cancel"):
@@ -99,11 +107,26 @@ func _physics_process(delta: float) -> void:
 
 	camera.fov = lerpf(camera.fov, (SPRINT_FOV if Input.is_action_pressed("sprint") else BASE_FOV), delta * 10.0)
 	camera.fov = lerpf(camera.fov, (CROUCH_FOV if speed == CROUCH_SPEED else BASE_FOV), delta * 8.0)
+	
+	# Handle shadow transparency when crouching.
+	if speed == CROUCH_SPEED:
+		shadow.transparency = lerp(1.0, 0.1, 1.0)
+	else:
+		shadow.transparency = lerp(0.1, 1.0, 1.0)
 
+	# --- Weapon Sway ---
+	var sway_freq = SWAY_IDLE_FREQ
+	var sway_amp = SWAY_IDLE_AMP
+
+	t_sway_time += delta
+	var sway_offset = Vector3(sin(t_sway_time * sway_freq) * sway_amp, 0, 0)
+	knife.position = knife_base_pos + sway_offset
+	#ai
 	move_and_slide()
 
 func _headbob(time) -> Vector3:
+	# Head bobbing effect based on time and speed.
 	var pos = Vector3.ZERO
 	pos.y = sin(time * BOB_FREQUENCY) * BOB_AMPLITUDE
-	pos.x = cos(time * BOB_FREQUENCY / 2) * BOB_AMPLITUDE
+	pos.x = cos(time * BOB_FREQUENCY / 4) * BOB_AMPLITUDE
 	return pos
