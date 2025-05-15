@@ -421,7 +421,7 @@ use_collision = true
 size = Vector3(0.0396846, 1.8, 1.44176)
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.538, 0.85, -21.126)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.538, 0.852, -21.126)
 use_collision = true
 size = Vector3(0.04, 1.7, 0.04)
 
@@ -459,7 +459,6 @@ Ctrl to crouch
 Esc to exit"
 
 [node name="winnar" type="TextEdit" parent="UI"]
-visible = false
 offset_left = 720.0
 offset_top = 501.0
 offset_right = 836.0
