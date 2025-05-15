@@ -1,11 +1,13 @@
-[gd_scene load_steps=30 format=4 uid="uid://d4b6bgok5w8nj"]
+[gd_scene load_steps=31 format=4 uid="uid://d4b6bgok5w8nj"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_dccl0"]
 [ext_resource type="Texture2D" uid="uid://dce6ouuw4c5u3" path="res://resources/models/skele_hand_SkelyDraugr_2_Color.png" id="2_03gva"]
 [ext_resource type="Material" uid="uid://bbxa5a0gq3bfv" path="res://resources/materials/grey_material.tres" id="2_3taea"]
 [ext_resource type="Texture2D" uid="uid://bvcojbvcnhwte" path="res://resources/textures/shadow.png" id="2_rt1w7"]
 [ext_resource type="PackedScene" uid="uid://dcir60dw0aqkm" path="res://scenes/skely_draugr.tscn" id="3_x0xow"]
+[ext_resource type="Shape3D" uid="uid://dc2js6c3v1vmq" path="res://resources/shapes/player_capsule.tres" id="4_guhio"]
 [ext_resource type="Texture2D" uid="uid://jdvhbwh8tanj" path="res://resources/ui/crosshair.png" id="5_4ong7"]
+[ext_resource type="AudioStream" uid="uid://qxbqlu2tckkb" path="res://resources/sounds/sfx/step.wav" id="5_lnfdh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8xxwv"]
 sky_top_color = Color(0.51985, 0.105964, 0.9485, 1)
@@ -37,7 +39,6 @@ volumetric_fog_emission = Color(0.436623, 0.7694, 0.951465, 1)
 volumetric_fog_detail_spread = 6.0
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_7slkh"]
-auto_exposure_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_73vyo"]
 transparency = 1
@@ -215,10 +216,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_iipj2")
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u370v"]
-radius = 0.35
-height = 1.8
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wc26o"]
 albedo_color = Color(0.099986, 0.099986, 0.099986, 1)
 metallic = 0.41
@@ -242,7 +239,7 @@ albedo_color = Color(0.0403187, 0.71479, 0.879905, 1)
 [node name="World" type="Node3D"]
 
 [node name="sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.695323, 0.214086, 0.68607, -0.62041, 0.66067, 0.422618, -0.36279, -0.719502, 0.5922, 0, 0, 0)
+transform = Transform3D(-0.861961, -0.372048, -0.344387, -0.0617186, -0.59724, 0.799684, -0.503202, 0.710553, 0.491835, 0, 0, 0)
 shadow_enabled = true
 directional_shadow_mode = 0
 
@@ -251,21 +248,20 @@ environment = SubResource("Environment_351mu")
 camera_attributes = SubResource("CameraAttributesPractical_7slkh")
 
 [node name="Player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.429642, 0)
 script = ExtResource("1_dccl0")
 
 [node name="Head" type="Node3D" parent="Player"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.1497, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.7, 0)
 
 [node name="Shadow" type="MeshInstance3D" parent="Player/Head"]
 transform = Transform3D(-0.4, -6.03983e-08, -6.60024e-15, 0, -1.74846e-08, 1, -6.03983e-08, 0.4, 4.37114e-08, 0, -1.19, 0)
+visible = false
 material_override = SubResource("StandardMaterial3D_73vyo")
 transparency = 1.0
 mesh = SubResource("QuadMesh_irvff")
 skeleton = NodePath("../..")
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head"]
-fov = 70.0
 
 [node name="Knife" type="MeshInstance3D" parent="Player/Head/Camera3D"]
 transform = Transform3D(0.563114, 0.0997005, -0.820343, 0.737376, 0.38753, 0.553261, 0.373068, -0.91645, 0.144707, 0.104215, -0.104722, -0.172641)
@@ -280,8 +276,17 @@ mesh = SubResource("ArrayMesh_l4vbh")
 skeleton = NodePath("")
 
 [node name="PlayerCollision" type="CollisionShape3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.332, 0)
-shape = SubResource("CapsuleShape3D_u370v")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = ExtResource("4_guhio")
+
+[node name="PlayerShapeCast" type="ShapeCast3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = ExtResource("4_guhio")
+target_position = Vector3(0, 0, 0)
+
+[node name="FootstepSound" type="AudioStreamPlayer" parent="Player"]
+stream = ExtResource("5_lnfdh")
+volume_db = -5.0
 
 [node name="LevelGeometry" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.826e-06, 0, -0.44243)
@@ -415,15 +420,11 @@ use_collision = true
 size = Vector3(0.864395, 0.0706635, 8.55509)
 material = SubResource("StandardMaterial3D_wc26o")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-0.073273, -0.997312, 0, 0.997312, -0.073273, 0, 0, 0, 1, -4.53703, 1.82921, -11.161)
+[node name="limbo_bar" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(-1, 8.74227e-08, 0, -8.74227e-08, -1, 0, 0, 0, 1, -4.348, 1.91, -7.05831)
 use_collision = true
-size = Vector3(0.0396846, 1.8, 1.44176)
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.538, 0.85, -21.126)
-use_collision = true
-size = Vector3(0.04, 1.7, 0.04)
+size = Vector3(5, 0.2, 1.13662)
+material = SubResource("StandardMaterial3D_wc26o")
 
 [node name="BigBoner" parent="." instance=ExtResource("3_x0xow")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88475, -12.1707, -108.873)
@@ -458,13 +459,9 @@ Space to jump
 Ctrl to crouch
 Esc to exit"
 
-[node name="winnar" type="TextEdit" parent="UI"]
-visible = false
-offset_left = 720.0
-offset_top = 501.0
-offset_right = 836.0
-offset_bottom = 728.0
-text = "you're winna
-r :)
-
-escape to exit"
+[node name="MessageLabel" type="Label" parent="UI"]
+offset_left = 710.0
+offset_top = 78.0
+offset_right = 1210.0
+offset_bottom = 143.0
+horizontal_alignment = 1
