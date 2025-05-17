@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-# --- Constants ---
+# region Constants
 
 # Movement
 const WALK_SPEED = 3.0
@@ -19,200 +19,245 @@ const SENSITIVITY = 0.0028
 # Head Bobbing
 const BASE_BOB_FREQUENCY = 3.5
 const BASE_BOB_AMPLITUDE = 0.025
+const SPRINT_BOB_APLITUDE = BASE_BOB_AMPLITUDE * 2.4
 
 # Weapon Sway
-const SWAY_IDLE_FREQ = 0.75
-const SWAY_IDLE_AMP = 0.02
+const SWAY_IDLE_FREQ = 0.75 / 4
+const SWAY_IDLE_AMP = 0.02 * 1.2
 
 # Heights
-const STANDING_HEIGHT = 1.79
-const CROUCH_HEIGHT = 0.99
+const STANDING_HEIGHT = 1.8
+const CROUCH_HEIGHT = 1
 const STANDING_EYE_HEIGHT = 1.7
 const CROUCH_EYE_HEIGHT = 0.9
 
 # FOV
 const BASE_FOV = 75.0
-const SPRINT_FOV = 80.0 * 1.5
+const SPRINT_FOV = 85.0
 const CROUCH_FOV = 70.0
 
-# --- Variables ---
+# endregion
+
+# region Variables
 
 # Testing
-var limbo_height = 1.7
-var already_played = false
+var limbo_height = 1.1
 
 # Movement
 var current_speed = WALK_SPEED
-var prev_step_number = 0.0
+var prev_footstep_phase = 0.0
 
 # Physics
 var time_walked = BASE_TIME_WALKED
-var t_sway_time = 0.0
+var sway_time = 0.0
 var knife_base_pos = Vector3.ZERO
 var bob_frequency = BASE_BOB_FREQUENCY
 var bob_amplitude = BASE_BOB_AMPLITUDE
 var step_number = 0.0
 
-# ! - for footsteps to correspond with steps, a step sound needs to play every time headbob pos.y sinewave is at its highest or lowest
-# (*) Footsteps - handle later
-# var footstep_timer = 0.0
-# var current_footstep_interval = 0.5
+# endregion
 
-# --- Node Declaration ---
+# region Nodes
 
+# Player
+@onready var player_collision = $PlayerCollision
+@onready var player_shapecast = $PlayerShapeCast
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var knife = $Head/Camera3D/Knife
-@onready var shadow = $Head/Shadow
-@onready var player_collision = $PlayerCollision
-@onready var limbo_bar = $"../LevelGeometry/limbo_bar"
-@onready var player_shapecast = $PlayerShapeCast
 @onready var footstep_sound = $FootstepSound
-@onready var message_label = $"../UI/MessageLabel"
 
-# --- Functions ---
+# Level
+@onready var movement_status_label = $"../UI/MovementStatus"
+@onready var standing_message_label = $"../UI/StandingMessage"
+
+# Testing
+@onready var limbo_bar = $"../LevelGeometry/limbo_bar"
+@onready var test_box = $"../LevelGeometry/TestBox"
+
+# endregion
+
+# region Functions
+
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	knife_base_pos = knife.position
+    Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+    knife_base_pos = knife.position
 
-	limbo_bar.position.y = limbo_height + 0.1
+    limbo_bar.position.y = limbo_height + 0.1
 
-	player_collision.shape.height = STANDING_HEIGHT
+    player_collision.shape.height = STANDING_HEIGHT
+    
+    _show_game_title(2.0)
 
 func _unhandled_input(event):
-	if event is InputEventMouseMotion:
-		# Rotate the head and camera based on mouse movement.
-		head.rotate_y(-event.relative.x * SENSITIVITY)
-		camera.rotate_x(-event.relative.y * SENSITIVITY)
-		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
+    if event is InputEventMouseMotion:
+        # Rotate the head and camera based on mouse movement.
+        head.rotate_y(-event.relative.x * SENSITIVITY)
+        camera.rotate_x(-event.relative.y * SENSITIVITY)
+        camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
 
-	# Handle input for exiting the game.
-	if event.is_action_pressed("ui_cancel"):
-		get_tree().quit()
+    # Handle input for exiting the game.
+    if event.is_action_pressed("ui_cancel"):
+        get_tree().quit()
 
 func _physics_process(delta: float) -> void:
-	# Add gravity.
-	if not is_on_floor():
-		velocity.y -= GRAVITY * delta
+    # Add gravity.
+    if not is_on_floor():
+        velocity.y -= GRAVITY * delta
 
-	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		time_walked = BASE_TIME_WALKED
+    # Handle jump.
+    if Input.is_action_just_pressed("jump") and is_on_floor():
+        velocity.y = JUMP_VELOCITY
+        time_walked = BASE_TIME_WALKED
 
-	# Handle sprinting.
-	# if the player is pressing the sprint button and not crouching and moving, set the speed to sprint speed
-	if Input.is_action_pressed("sprint") and current_speed != CROUCH_SPEED and _player_is_moving():
-		current_speed = SPRINT_SPEED
-		bob_amplitude = BASE_BOB_AMPLITUDE * 2
-	elif Input.is_action_just_released("sprint") and current_speed != CROUCH_SPEED:
-		current_speed = WALK_SPEED
-		bob_amplitude = BASE_BOB_AMPLITUDE
+    # Handle sprinting.
+    # if the player is pressing the sprint button and not crouching and moving, set the speed to sprint speed
+    if Input.is_action_pressed("sprint") and (not _crouching()) and _moving() and Input.is_action_pressed("move_forward"):
+        current_speed = SPRINT_SPEED
+        bob_amplitude = BASE_BOB_AMPLITUDE * 2.2
+    elif Input.is_action_just_released("sprint") and not _crouching():
+        current_speed = WALK_SPEED
+        bob_amplitude = BASE_BOB_AMPLITUDE
 
-	# Handle crouch toggle
-	if Input.is_action_just_pressed("crouch"):
-		if current_speed != CROUCH_SPEED:
-			current_speed = CROUCH_SPEED
-		elif current_speed == CROUCH_SPEED and can_stand_up():
-			current_speed = WALK_SPEED
-		else:
-			show_message("Can't stand up, not enough space")
-				
-	# Handle head position when crouching
-	var target_eye_height = STANDING_EYE_HEIGHT
-	if current_speed == CROUCH_SPEED:
-		target_eye_height = CROUCH_EYE_HEIGHT
-	else:
-		target_eye_height = STANDING_EYE_HEIGHT
+    if (Input.is_action_just_released("move_forward") or Input.is_action_just_pressed("move_back")) and not _crouching():
+        current_speed = WALK_SPEED
+        bob_amplitude = BASE_BOB_AMPLITUDE
 
-	head.position.y = lerp(head.position.y, target_eye_height, 0.25)
-		
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if is_on_floor():
-		# Apply current_speed to movement when on the floor.
-		if direction:
-			velocity.x = direction.x * current_speed
-			velocity.z = direction.z * current_speed
-		else:
-			# Apply deceleration when no input is given.
-			velocity.x = lerp(velocity.x, direction.x * current_speed, delta * 10.0)
-			velocity.z = lerp(velocity.z, direction.z * current_speed, delta * 10.0)
-	else:
-		# Apply deceleration when not on the floor.
-		velocity.x = lerp(velocity.x, direction.x * current_speed, delta * 8.0)
-		velocity.z = lerp(velocity.z, direction.z * current_speed, delta * 8.0)
+    # Handle crouch toggle
+    if Input.is_action_just_pressed("crouch"):
+        if _not_sprinting_or_crouching():
+            current_speed = CROUCH_SPEED
+        elif _crouching():
+            if _can_stand_up():
+                current_speed = WALK_SPEED
+        
+    # Get the input direction and handle the movement/deceleration.
+    var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+    var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+    if is_on_floor():
+        # Apply current_speed to movement when on the floor.
+        if direction:
+            velocity.x = direction.x * current_speed
+            velocity.z = direction.z * current_speed
+        else:
+            # Apply deceleration when no input is given.
+            velocity.x = lerp(velocity.x, direction.x * current_speed, delta * 10.0)
+            velocity.z = lerp(velocity.z, direction.z * current_speed, delta * 10.0)
+    else:
+        # Apply deceleration when not on the floor.
+        velocity.x = lerp(velocity.x, direction.x * current_speed, delta * 8.0)
+        velocity.z = lerp(velocity.z, direction.z * current_speed, delta * 8.0)
 
-	# Apply head bobbing effect.
-	time_walked += velocity.length() * delta * float(is_on_floor())
-	if time_walked > 10000:
-		time_walked = 0.0
-	camera.transform.origin = _headbob(time_walked)
-	step_number = snapped((time_walked * 0.55) + 0.5, 0)
-	show_test_message(str(step_number))
-	# Every time step_number increases by 1, play footstep_sound
-	if step_number != prev_step_number:
-		footstep_sound.play()
-		prev_step_number = step_number
+    # Apply head bobbing effect.
+    time_walked += velocity.length() * delta * float(is_on_floor())
+    camera.transform.origin = _headbob(time_walked)
+    var step_count = 1
+    var current_footstep_phase = _footstep(time_walked)
+    if prev_footstep_phase > 0.05 and current_footstep_phase <= 0.05:
+        footstep_sound.play()
+        if step_count == 1:
+            step_count += 1
+        elif step_count == 2:
+            step_count = 1
+    prev_footstep_phase = current_footstep_phase
 
-	# Handle camera FOV changes.
-	camera.fov = lerpf(camera.fov, (SPRINT_FOV if current_speed == SPRINT_SPEED else BASE_FOV), delta * 8.0)
-	camera.fov = lerpf(camera.fov, (CROUCH_FOV if current_speed == CROUCH_SPEED else BASE_FOV), delta * 8.0)
-	
-	# Handle shadow transparency when crouching.
-	if current_speed == CROUCH_SPEED:
-		shadow.transparency = lerp(1.0, 0.1, 1)
-	else:
-		shadow.transparency = lerp(0.1, 1.0, 1)
+    print(snapped(player_shapecast.position.y, 0.01))
 
-	# --- Weapon Sway ---
-	var sway_freq = SWAY_IDLE_FREQ
-	var sway_amp = SWAY_IDLE_AMP
+    # Handle camera FOV changes.
+    camera.fov = lerpf(camera.fov, (SPRINT_FOV if _sprinting() else BASE_FOV), delta * 8.0)
+    camera.fov = lerpf(camera.fov, (CROUCH_FOV if _crouching() else BASE_FOV), delta * 8.0)
 
-	t_sway_time += delta
-	var sway_offset = Vector3(sin(t_sway_time * sway_freq) * sway_amp, 0, 0)
-	knife.position = knife_base_pos + sway_offset
+   
+    var sway_freq = SWAY_IDLE_FREQ
+    var sway_amp = SWAY_IDLE_AMP
 
-	if current_speed == CROUCH_SPEED:
-		player_collision.shape.height = CROUCH_HEIGHT
-	else:
-		player_collision.shape.height = STANDING_HEIGHT
-
-	# prevent player from standing when not enough space to fit their standing height
+    sway_time += delta
+    var sway_offset = Vector3(sin(sway_time * sway_freq) * sway_amp, 0, 0)
+    knife.position = knife_base_pos + sway_offset
 
 
-	move_and_slide()
+    if _crouching():
+        player_collision.shape.height = CROUCH_HEIGHT
+        player_collision.transform.origin.y = 0.5
+        head.transform.origin.y = lerpf(head.transform.origin.y, CROUCH_EYE_HEIGHT, delta * 10)
+        if not _can_stand_up():
+            _show__permanent_stand_error_message("No space above to stand up")
+        else:
+            standing_message_label.hide()
+    else:
+        player_collision.shape.height = STANDING_HEIGHT
+        player_collision.transform.origin.y = 0.9
+        head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
+
+    if _crouching():
+        movement_status_label.text = "Crouching"
+    elif _sprinting():
+        movement_status_label.text = "Sprinting"
+    elif _not_sprinting_or_crouching():
+        movement_status_label.text = "Walking"
+    else:
+        movement_status_label.text = "Error"
+    
+    move_and_slide()
+
+# endregion
+
+# region Functions
 
 func _headbob(time) -> Vector3:
-	# Head bobbing effect based on time and current_speed.
-	var pos = Vector3.ZERO
-	pos.y = cos(time * bob_frequency) * bob_amplitude
-	pos.x = sin(time * bob_frequency / 2) * (bob_amplitude / 2)
-	return pos
+    # Head bobbing effect based on time and current_speed.
+    var pos = Vector3.ZERO
+    pos.y = cos(time * bob_frequency) * bob_amplitude
+    pos.x = sin(time * bob_frequency / 2) * (bob_amplitude / 2)
+    return pos
 
-#func _footstep(time) -> 
+func _footstep(time) -> float:
+    var step = 0.0
+    step = cos(time * bob_frequency) * bob_amplitude
+    # when return reaches 0, play a step sound
+    return snapped(100 * step, 0.01) + 2.5
 
-func can_stand_up() -> bool:
-	var space_needed = STANDING_HEIGHT - CROUCH_HEIGHT - 0.01
-	player_shapecast.target_position = Vector3.UP * space_needed
-	player_shapecast.force_update_transform() # Ensure it's up to date
-	player_shapecast.enabled = true
-	player_shapecast.force_shapecast_update()
-	return not player_shapecast.is_colliding()
+func _can_stand_up() -> bool:
+    var space_needed = STANDING_HEIGHT - CROUCH_HEIGHT - 0.01
+    player_shapecast.target_position = Vector3.UP * space_needed
+    player_shapecast.force_update_transform() # Ensure it's up to date
+    player_shapecast.enabled = true
+    player_shapecast.force_shapecast_update()
+    return not player_shapecast.is_colliding()
 
-func show_message(msg: String, duration := 2.0):
-	message_label.text = msg
-	message_label.show()
-	await get_tree().create_timer(duration).timeout
-	message_label.hide()
+func _show_stand_error_message(msg: String, duration: float):
+    standing_message_label.text = msg
+    standing_message_label.show()
+    await get_tree().create_timer(duration).timeout
+    standing_message_label.hide()
 
-func show_test_message(msg: String):
-	message_label.text = msg
-	message_label.show()
+func _show__permanent_stand_error_message(msg: String):
+    standing_message_label.text = msg
+    standing_message_label.show()
+    
+func _show_game_title(duration: float):
+    $"../UI/GameTitle".show()
+    await get_tree().create_timer(duration).timeout
+    $"../UI/GameTitle".hide()
 
-func _player_is_moving() -> bool:
-	# Check if the player is moving based on the current speed and input direction.
-	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	return direction.length() > 0.1
+# endregion
+
+# region State Helpers
+
+func _moving() -> bool:
+    # Check if the player is moving based on the current speed and input direction.
+    var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+    var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+    # return direction.length() > 0.1
+    return direction.length() > 0.1
+
+func _sprinting() -> bool:
+    return current_speed == SPRINT_SPEED
+
+func _crouching() -> bool:
+    return current_speed == CROUCH_SPEED
+
+func _not_sprinting_or_crouching() -> bool:
+    return current_speed != CROUCH_SPEED and current_speed != SPRINT_SPEED
+
+# endregion

@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://d4b6bgok5w8nj"]
+[gd_scene load_steps=39 format=4 uid="uid://d4b6bgok5w8nj"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_dccl0"]
 [ext_resource type="Texture2D" uid="uid://dce6ouuw4c5u3" path="res://resources/models/skele_hand_SkelyDraugr_2_Color.png" id="2_03gva"]
@@ -6,8 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://bvcojbvcnhwte" path="res://resources/textures/shadow.png" id="2_rt1w7"]
 [ext_resource type="PackedScene" uid="uid://dcir60dw0aqkm" path="res://scenes/skely_draugr.tscn" id="3_x0xow"]
 [ext_resource type="Shape3D" uid="uid://dc2js6c3v1vmq" path="res://resources/shapes/player_capsule.tres" id="4_guhio"]
-[ext_resource type="Texture2D" uid="uid://jdvhbwh8tanj" path="res://resources/ui/crosshair.png" id="5_4ong7"]
+[ext_resource type="Texture2D" uid="uid://jdvhbwh8tanj" path="res://resources/ui/textures/crosshair.png" id="5_4ong7"]
 [ext_resource type="AudioStream" uid="uid://qxbqlu2tckkb" path="res://resources/sounds/sfx/step.wav" id="5_lnfdh"]
+[ext_resource type="FontFile" uid="uid://b7yx4xufr5lwh" path="res://resources/ui/fonts/Mate-Regular.ttf" id="9_8tx1a"]
+[ext_resource type="Texture2D" uid="uid://r6dydur0vlkn" path="res://resources/ui/textures/vignette_smaller.png" id="10_ylysu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8xxwv"]
 sky_top_color = Color(0.51985, 0.105964, 0.9485, 1)
@@ -216,6 +218,10 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_iipj2")
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lsvfn"]
+radius = 0.36
+height = 1.78
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wc26o"]
 albedo_color = Color(0.099986, 0.099986, 0.099986, 1)
 metallic = 0.41
@@ -235,6 +241,26 @@ albedo_color = Color(0.413087, 0.652326, 0.975753, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3sgmi"]
 albedo_color = Color(0.0403187, 0.71479, 0.879905, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukcrq"]
+albedo_color = Color(0.437112, 1, 0.654131, 1)
+metallic = 1.0
+roughness = 0.1
+
+[sub_resource type="LabelSettings" id="LabelSettings_yos7h"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_i76gu"]
+font = ExtResource("9_8tx1a")
+font_size = 34
+
+[sub_resource type="LabelSettings" id="LabelSettings_4350s"]
+font = ExtResource("9_8tx1a")
+font_size = 65
+
+[sub_resource type="LabelSettings" id="LabelSettings_ukpuw"]
+font = ExtResource("9_8tx1a")
+font_size = 18
 
 [node name="World" type="Node3D"]
 
@@ -280,8 +306,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = ExtResource("4_guhio")
 
 [node name="PlayerShapeCast" type="ShapeCast3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-shape = ExtResource("4_guhio")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91, 0)
+shape = SubResource("CapsuleShape3D_lsvfn")
 target_position = Vector3(0, 0, 0)
 
 [node name="FootstepSound" type="AudioStreamPlayer" parent="Player"]
@@ -421,14 +447,18 @@ size = Vector3(0.864395, 0.0706635, 8.55509)
 material = SubResource("StandardMaterial3D_wc26o")
 
 [node name="limbo_bar" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-1, 8.74227e-08, 0, -8.74227e-08, -1, 0, 0, 0, 1, -4.348, 1.91, -7.05831)
+transform = Transform3D(-1, 8.74227e-08, 0, -8.74227e-08, -1, 0, 0, 0, 1, -5.77952, 1.91, -6.83716)
 use_collision = true
-size = Vector3(5, 0.2, 1.13662)
+size = Vector3(2.13696, 0.2, 0.694311)
 material = SubResource("StandardMaterial3D_wc26o")
 
+[node name="TestBox" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.80432, 1.43037, -4.23406)
+material_override = SubResource("StandardMaterial3D_ukcrq")
+size = Vector3(0.15, 0.15, 0.15)
+
 [node name="BigBoner" parent="." instance=ExtResource("3_x0xow")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88475, -12.1707, -108.873)
-skeleton = NodePath("../Player")
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -1.88475, -119.258, -147.074)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -448,20 +478,51 @@ mouse_filter = 2
 texture = ExtResource("5_4ong7")
 stretch_mode = 3
 
-[node name="Guide" type="TextEdit" parent="UI"]
-offset_left = 1764.0
-offset_top = 521.0
-offset_right = 1887.0
-offset_bottom = 664.0
+[node name="MovementStatus" type="Label" parent="UI"]
+offset_left = 722.0
+offset_top = 636.0
+offset_right = 1101.0
+offset_bottom = 681.0
+text = "movement status"
+label_settings = SubResource("LabelSettings_yos7h")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="StandingMessage" type="Label" parent="UI"]
+offset_left = 661.0
+offset_top = 590.0
+offset_right = 1102.0
+offset_bottom = 643.0
+text = "No space above to stand up"
+label_settings = SubResource("LabelSettings_i76gu")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="GameTitle" type="Label" parent="UI"]
+offset_left = 34.0
+offset_top = 29.0
+offset_right = 1247.0
+offset_bottom = 176.0
+text = "video game title"
+label_settings = SubResource("LabelSettings_4350s")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayGuide" type="Label" parent="UI"]
+offset_left = 1122.0
+offset_top = 550.0
+offset_right = 1238.0
+offset_bottom = 677.0
 text = "WASD to move
 Shift to sprint
 Space to jump
 Ctrl to crouch
 Esc to exit"
+label_settings = SubResource("LabelSettings_ukpuw")
+vertical_alignment = 2
 
-[node name="MessageLabel" type="Label" parent="UI"]
-offset_left = 710.0
-offset_top = 78.0
-offset_right = 1210.0
-offset_bottom = 143.0
-horizontal_alignment = 1
+[node name="TextureRect" type="TextureRect" parent="UI"]
+visible = false
+offset_right = 1280.0
+offset_bottom = 720.0
+texture = ExtResource("10_ylysu")
