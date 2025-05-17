@@ -493,7 +493,6 @@ offset_left = 661.0
 offset_top = 590.0
 offset_right = 1102.0
 offset_bottom = 643.0
-text = "No space above to stand up"
 label_settings = SubResource("LabelSettings_i76gu")
 horizontal_alignment = 2
 vertical_alignment = 2
@@ -521,7 +520,7 @@ Esc to exit"
 label_settings = SubResource("LabelSettings_ukpuw")
 vertical_alignment = 2
 
-[node name="TextureRect" type="TextureRect" parent="UI"]
+[node name="Vignette" type="TextureRect" parent="UI"]
 visible = false
 offset_right = 1280.0
 offset_bottom = 720.0
