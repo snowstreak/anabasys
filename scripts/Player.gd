@@ -102,13 +102,13 @@ var fade_duration = 0.2
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+
 	knife_base_pos = knife.position
 
 	limbo_bar.position.y = limbo_height + 1
 
 	player_collision.shape.height = STANDING_HEIGHT
-	
+
 	_show_game_title(2.0)
 
 	vignette.modulate.a = 0
@@ -128,9 +128,11 @@ func _unhandled_input(event):
 		get_tree().quit()
 
 # endregion
-# region Physics Process
 
-func _physics_process(delta: float) -> void:
+# region Process
+
+func _process(delta: float) -> void:
+	# Noclip toggle
 	if Input.is_action_just_pressed("noclip"):
 		is_noclipping = not is_noclipping
 		print(is_noclipping)
@@ -167,7 +169,89 @@ func _physics_process(delta: float) -> void:
 
 		global_transform.origin += direction * noclip_speed * delta # Directly update position
 
-	else:
+	# Handle sprinting.
+	# if the player is pressing the sprint button and not crouching and moving, set the state to sprinting
+	if Input.is_action_pressed("sprint") and player_state != PlayerState.CROUCHING and _moving() and Input.is_action_pressed("move_forward") and is_on_floor():
+		player_state = PlayerState.SPRINTING
+	elif Input.is_action_just_released("sprint") and player_state == PlayerState.SPRINTING:
+		player_state = PlayerState.STANDING
+
+	# If player stops moving forward while sprinting, return to standing
+	if (Input.is_action_just_released("move_forward") or Input.is_action_just_pressed("move_back")) and player_state == PlayerState.SPRINTING:
+		player_state = PlayerState.STANDING
+
+	# Handle crouch toggle
+	if Input.is_action_just_pressed("crouch"):
+		if player_state != PlayerState.CROUCHING:
+			player_state = PlayerState.CROUCHING
+			fade_in()
+		elif player_state == PlayerState.CROUCHING:
+			if _can_stand_up():
+				player_state = PlayerState.STANDING
+				fade_out()
+
+	# Update player properties based on state (visual/audio parameters)
+	match player_state:
+		PlayerState.STANDING:
+			bob_frequency = BASE_BOB_FREQUENCY
+			bob_amplitude = BASE_BOB_AMPLITUDE
+			head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
+		PlayerState.CROUCHING:
+			bob_frequency = BASE_BOB_FREQUENCY * 0.7 # Adjust bobbing for crouch
+			bob_amplitude = BASE_BOB_AMPLITUDE * 0.5 # Adjust bobbing for crouch
+			head.transform.origin.y = lerpf(head.transform.origin.y, CROUCH_EYE_HEIGHT, delta * 10)
+			if not _can_stand_up():
+				_show_permanent_stand_error_message("No space above to stand up")
+			else:
+				standing_message_label.hide()
+		PlayerState.SPRINTING:
+			bob_frequency = BASE_BOB_FREQUENCY * 1.2 # Adjust bobbing for sprint
+			bob_amplitude = SPRINT_BOB_APLITUDE
+			head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
+
+	# Apply head bobbing effect (visual)
+	camera.transform.origin = _headbob(time_walked)
+
+	# Footstep sound triggering (audio)
+	var current_footstep_phase = _footstep(time_walked)
+	if prev_footstep_phase > 0.025 and current_footstep_phase <= 0.025:
+		footstep_sound.play()
+	prev_footstep_phase = current_footstep_phase
+
+	# Handle camera FOV changes (visual)
+	var target_fov = BASE_FOV
+	match player_state:
+		PlayerState.CROUCHING:
+			target_fov = CROUCH_FOV
+		PlayerState.SPRINTING:
+			target_fov = SPRINT_FOV
+	camera.fov = lerpf(camera.fov, target_fov, delta * 8.0)
+
+	# Weapon sway effect (visual)
+	var sway_freq = SWAY_IDLE_FREQ
+	var sway_amp = SWAY_IDLE_AMP
+
+	sway_time += delta
+	var sway_offset = Vector3(sin(sway_time * sway_freq) * sway_amp, 0, 0)
+	knife.position = knife_base_pos + sway_offset
+
+	# Update movement status label (UI)
+	match player_state:
+		PlayerState.CROUCHING:
+			movement_status_label.text = "Crouching"
+		PlayerState.SPRINTING:
+			movement_status_label.text = "Sprinting"
+		PlayerState.STANDING:
+			movement_status_label.text = "Walking"
+		_: # Default case for any other state (shouldn't happen with enum)
+			movement_status_label.text = "Error"
+
+# endregion
+
+# region Physics Process
+
+func _physics_process(delta: float) -> void:
+	if not is_noclipping:
 		# Add gravity.
 		if not is_on_floor():
 			# falling
@@ -182,59 +266,20 @@ func _physics_process(delta: float) -> void:
 			await get_tree().process_frame
 			time_walked = BASE_TIME_WALKED
 
-		# Handle sprinting.
-		# if the player is pressing the sprint button and not crouching and moving, set the speed to sprint speed
-		# Handle sprinting.
-		# if the player is pressing the sprint button and not crouching and moving, set the state to sprinting
-		if Input.is_action_pressed("sprint") and player_state != PlayerState.CROUCHING and _moving() and Input.is_action_pressed("move_forward") and is_on_floor():
-			player_state = PlayerState.SPRINTING
-		elif Input.is_action_just_released("sprint") and player_state == PlayerState.SPRINTING:
-			player_state = PlayerState.STANDING
-
-		# If player stops moving forward while sprinting, return to standing
-		if (Input.is_action_just_released("move_forward") or Input.is_action_just_pressed("move_back")) and player_state == PlayerState.SPRINTING:
-			player_state = PlayerState.STANDING
-
-		# Handle crouch toggle
-		if Input.is_action_just_pressed("crouch"):
-			if player_state != PlayerState.CROUCHING:
-				player_state = PlayerState.CROUCHING
-				fade_in()
-			elif player_state == PlayerState.CROUCHING:
-				if _can_stand_up():
-					player_state = PlayerState.STANDING
-					fade_out()
-
-		# Update player properties based on state
+		# Update player properties based on state (physics parameters)
 		match player_state:
 			PlayerState.STANDING:
 				current_speed = WALK_SPEED
-				bob_frequency = BASE_BOB_FREQUENCY
-				bob_amplitude = BASE_BOB_AMPLITUDE
 				player_collision.shape.height = STANDING_HEIGHT
 				player_collision.transform.origin.y = 0.9
-				head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
-				#vignette.visible = false # Handled by fade_out
 			PlayerState.CROUCHING:
 				current_speed = CROUCH_SPEED
-				bob_frequency = BASE_BOB_FREQUENCY * 0.7 # Adjust bobbing for crouch
-				bob_amplitude = BASE_BOB_AMPLITUDE * 0.5 # Adjust bobbing for crouch
 				player_collision.shape.height = CROUCH_HEIGHT
 				player_collision.transform.origin.y = 0.5
-				head.transform.origin.y = lerpf(head.transform.origin.y, CROUCH_EYE_HEIGHT, delta * 10)
-				# vignette.visible = true # Handled by fade_in
-				if not _can_stand_up():
-					_show_permanent_stand_error_message("No space above to stand up")
-				else:
-					standing_message_label.hide()
 			PlayerState.SPRINTING:
 				current_speed = SPRINT_SPEED
-				bob_frequency = BASE_BOB_FREQUENCY * 1.2 # Adjust bobbing for sprint
-				bob_amplitude = SPRINT_BOB_APLITUDE
 				player_collision.shape.height = STANDING_HEIGHT # Sprinting is done standing
 				player_collision.transform.origin.y = 0.9
-				head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
-				#vignette.visible = false # Handled by fade_out
 
 		# Get the input direction and handle the movement/deceleration.
 		var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -253,48 +298,13 @@ func _physics_process(delta: float) -> void:
 			velocity.x = lerp(velocity.x, direction.x * current_speed, delta * 8.0)
 			velocity.z = lerp(velocity.z, direction.z * current_speed, delta * 8.0)
 
-		# Apply head bobbing effect.
+		# Update time_walked based on velocity (physics-dependent)
 		time_walked += velocity.length() * delta * float(is_on_floor())
 		# Reset time_walked periodically to avoid float overflow, but keep bobbing/footsteps looping smoothly
-		var bob_period = 2 * TAU / bob_frequency
+		var bob_period = 2 * TAU / bob_frequency # bob_frequency is updated in _process, but used here. This dependency is acceptable.
 		if time_walked > 1000.0:
 			time_walked = fmod(time_walked, bob_period)
-		camera.transform.origin = _headbob(time_walked)
-		var current_footstep_phase = _footstep(time_walked)
-		if prev_footstep_phase > 0.025 and current_footstep_phase <= 0.025:
-			footstep_sound.play()
-		prev_footstep_phase = current_footstep_phase
 
-		# Handle camera FOV changes.
-		# Handle camera FOV changes based on state.
-		var target_fov = BASE_FOV
-		match player_state:
-			PlayerState.CROUCHING:
-				target_fov = CROUCH_FOV
-			PlayerState.SPRINTING:
-				target_fov = SPRINT_FOV
-		camera.fov = lerpf(camera.fov, target_fov, delta * 8.0)
-
-		
-		var sway_freq = SWAY_IDLE_FREQ
-		var sway_amp = SWAY_IDLE_AMP
-
-		sway_time += delta
-		var sway_offset = Vector3(sin(sway_time * sway_freq) * sway_amp, 0, 0)
-		knife.position = knife_base_pos + sway_offset
-
-
-		# Update movement status label based on state.
-		match player_state:
-			PlayerState.CROUCHING:
-				movement_status_label.text = "Crouching"
-			PlayerState.SPRINTING:
-				movement_status_label.text = "Sprinting"
-			PlayerState.STANDING:
-				movement_status_label.text = "Walking"
-			_: # Default case for any other state (shouldn't happen with enum)
-				movement_status_label.text = "Error"
-		
 		move_and_slide()
 
 # endregion
@@ -334,7 +344,7 @@ func _show_stand_error_message(msg: String, duration: float):
 func _show_permanent_stand_error_message(msg: String):
 	standing_message_label.text = msg
 	standing_message_label.show()
-	
+
 func _show_game_title(duration: float):
 	$"../UI/GameTitle".show()
 	await get_tree().create_timer(duration).timeout
