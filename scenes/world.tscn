@@ -32,11 +32,12 @@ radiance_size = 1
 background_mode = 2
 sky = SubResource("Sky_h35ex")
 ambient_light_source = 3
+ssr_enabled = true
 ssao_enabled = true
 glow_enabled = true
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.025
-volumetric_fog_sky_affect = 0.0
+volumetric_fog_sky_affect = 0.2
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_7slkh"]
 
@@ -255,8 +256,8 @@ font_size = 28
 
 [node name="World" type="Node3D"]
 
-[node name="sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.861961, -0.372048, -0.344387, -0.0617186, -0.59724, 0.799684, -0.503202, 0.710553, 0.491835, 0, 0, 0)
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.965851, -0.181354, 0.185045, 0.251062, -0.831558, 0.495458, 0.0640219, 0.524997, 0.848692, 0, 0, 0)
 shadow_enabled = true
 shadow_bias = 0.05
 shadow_opacity = 0.9
@@ -285,6 +286,8 @@ skeleton = NodePath("../..")
 
 [node name="Knife" type="MeshInstance3D" parent="Player/Head/Camera3D"]
 transform = Transform3D(0.563114, 0.0997005, -0.820343, 0.737376, 0.38753, 0.553261, 0.373068, -0.91645, 0.144707, 0.104215, -0.104722, -0.172641)
+visible = false
+cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("ArrayMesh_7jcqs")
 skeleton = NodePath("")
