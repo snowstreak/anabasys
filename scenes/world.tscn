@@ -227,7 +227,7 @@ albedo_color = Color(0.333162, 0.835438, 0.517807, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q5onr"]
 emission_enabled = true
 emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 3.0
+emission_energy_multiplier = 1.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8fc1"]
 albedo_texture = ExtResource("9_jhx03")
@@ -269,6 +269,7 @@ environment = SubResource("Environment_351mu")
 camera_attributes = SubResource("CameraAttributesPractical_7slkh")
 
 [node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.15593, 0, -0.0186284)
 script = ExtResource("1_dwth8")
 
 [node name="Head" type="Node3D" parent="Player"]
@@ -351,22 +352,106 @@ size = Vector3(1, 1.2, 1)
 material = ExtResource("7_dvmea")
 
 [node name="Plank" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 0.890848, -0.454301, 0, 0.454301, 0.890847, 3.008, 5.04148, -13.237)
+transform = Transform3D(1, 7.50971e-09, -3.39369e-09, -8.23177e-09, 0.929667, -0.3684, 3.88404e-10, 0.3684, 0.929666, 2.83764, 4.91172, -13.4207)
+visible = false
 use_collision = true
-size = Vector3(0.864395, 0.0706635, 6.67091)
+size = Vector3(1.2, 0.071, 7.909)
 material = ExtResource("7_p33lc")
 
+[node name="Stair1" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.81913, 3.60208, -10.3246)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair2" type="CSGBox3D" parent="LevelGeometry/Stair1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair3" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair4" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair5" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair6" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair7" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5/Stair6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair8" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5/Stair6/Stair7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair9" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5/Stair6/Stair7/Stair8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair10" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5/Stair6/Stair7/Stair8/Stair9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair11" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5/Stair6/Stair7/Stair8/Stair9/Stair10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair12" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5/Stair6/Stair7/Stair8/Stair9/Stair10/Stair11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair13" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5/Stair6/Stair7/Stair8/Stair9/Stair10/Stair11/Stair12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
+[node name="Stair14" type="CSGBox3D" parent="LevelGeometry/Stair1/Stair2/Stair3/Stair4/Stair5/Stair6/Stair7/Stair8/Stair9/Stair10/Stair11/Stair12/Stair13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+size = Vector3(1.2, 0.2, 0.2)
+material = ExtResource("7_dvmea")
+
 [node name="Walkway" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, -1.4262, 6.5, -17.1865)
+transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, -1.426, 6.37687, -18)
 use_collision = true
 size = Vector3(11.6536, 0.05, 2)
 material = ExtResource("7_dvmea")
 
 [node name="LimboBar" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(4.37114e-08, 8.74227e-08, -1, 0, -1, -8.74227e-08, -1, 0, -4.37114e-08, -0.805, 8.01242, -17.186)
+transform = Transform3D(4.37114e-08, 8.74227e-08, -1, 0, -1, -8.74227e-08, -1, 0, -4.37114e-08, -2.63913, 8.20383, -17.9886)
 use_collision = true
-size = Vector3(2, 0.5, 1)
+size = Vector3(2.09039, 0.882813, 2.93834)
 material = ExtResource("7_p33lc")
+
+[node name="GlowBox2" type="CSGBox3D" parent="LevelGeometry/LimboBar"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.67037e-22, 0, -3.34075e-22, 1, 0, -1.38401, -2.38419e-07)
+use_collision = true
+size = Vector3(0.5, 0.5, 0.5)
+material = SubResource("StandardMaterial3D_q5onr")
+
+[node name="GlowBoxLight" type="OmniLight3D" parent="LevelGeometry/LimboBar/GlowBox2"]
+transform = Transform3D(1, -3.82137e-15, 0, 0, 1, -1.67037e-22, 0, -1.67037e-22, 1, 0, 0, 0)
+light_energy = 1.4
+light_size = 0.5
+shadow_enabled = true
+omni_range = 13.0
 
 [node name="JumpPlane" type="CSGBox3D" parent="LevelGeometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, -6.73316, 7.33532, -20.8487)
@@ -393,10 +478,10 @@ size = Vector3(0.5, 0.1, 17.5542)
 material = ExtResource("7_dvmea")
 
 [node name="WallS" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.457, 7.14326, 1.96)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.457, 8.03144, 1.96)
 material_override = ExtResource("7_dknka")
 use_collision = true
-size = Vector3(23.164, 16.3135, 1)
+size = Vector3(23.164, 18.0899, 1)
 material = ExtResource("7_dknka")
 
 [node name="WallW" type="CSGBox3D" parent="LevelGeometry"]
@@ -423,10 +508,30 @@ use_collision = true
 size = Vector3(43.607, 15, 1)
 material = ExtResource("7_dknka")
 
+[node name="WallMiddle" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, -0.601, 5.919, -19.1)
+use_collision = true
+size = Vector3(9.411, 13.418, 0.2)
+material = ExtResource("7_dknka")
+
+[node name="WallMiddle2" type="CSGBox3D" parent="LevelGeometry/WallMiddle"]
+transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, 1.89528, 5.919, -2.2)
+use_collision = true
+size = Vector3(9.41671, 13.418, 0.2)
+material = ExtResource("7_dknka")
+
 [node name="GlowBox" type="CSGBox3D" parent="LevelGeometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1049, 4.29905, -31.9454)
 use_collision = true
 material = SubResource("StandardMaterial3D_q5onr")
+
+[node name="GlowBoxLight" type="OmniLight3D" parent="LevelGeometry/GlowBox"]
+light_energy = 5.0
+light_volumetric_fog_energy = 2.0
+shadow_enabled = true
+shadow_opacity = 0.75
+shadow_blur = 4.0
+omni_range = 13.0
 
 [node name="ShadeBox" type="CSGBox3D" parent="LevelGeometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.100456, 3.17396, -30.4518)
@@ -434,7 +539,7 @@ use_collision = true
 material = ExtResource("7_dknka")
 
 [node name="Picture" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65439, 5.38788, 1.42683)
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -1.65439, 5.38788, 1.42683)
 use_collision = true
 size = Vector3(10, 10, 0.01)
 material = SubResource("StandardMaterial3D_o8fc1")

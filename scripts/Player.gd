@@ -102,6 +102,7 @@ var fade_duration = 0.2
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 	knife_base_pos = knife.position
 
 	limbo_bar.position.y = limbo_height + 1
@@ -130,7 +131,6 @@ func _unhandled_input(event):
 # region Physics Process
 
 func _physics_process(delta: float) -> void:
-	# TODO noclip
 	if Input.is_action_just_pressed("noclip"):
 		is_noclipping = not is_noclipping
 		print(is_noclipping)
