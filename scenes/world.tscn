@@ -1,44 +1,42 @@
 [gd_scene load_steps=39 format=4 uid="uid://d4b6bgok5w8nj"]
 
-[ext_resource type="Script" path="res://scripts/Player.gd" id="1_dccl0"]
+[ext_resource type="Script" uid="uid://cfouaospxm7sw" path="res://scripts/player.gd" id="1_dwth8"]
 [ext_resource type="Texture2D" uid="uid://dce6ouuw4c5u3" path="res://resources/models/skele_hand_SkelyDraugr_2_Color.png" id="2_03gva"]
-[ext_resource type="Material" uid="uid://bbxa5a0gq3bfv" path="res://resources/materials/grey_material.tres" id="2_3taea"]
 [ext_resource type="Texture2D" uid="uid://bvcojbvcnhwte" path="res://resources/textures/shadow.png" id="2_rt1w7"]
-[ext_resource type="PackedScene" uid="uid://dcir60dw0aqkm" path="res://scenes/skely_draugr.tscn" id="3_x0xow"]
 [ext_resource type="Shape3D" uid="uid://dc2js6c3v1vmq" path="res://resources/shapes/player_capsule.tres" id="4_guhio"]
 [ext_resource type="Texture2D" uid="uid://jdvhbwh8tanj" path="res://resources/ui/textures/crosshair.png" id="5_4ong7"]
 [ext_resource type="AudioStream" uid="uid://qxbqlu2tckkb" path="res://resources/sounds/sfx/step.wav" id="5_lnfdh"]
+[ext_resource type="Material" uid="uid://c3idwms3hh1jx" path="res://resources/materials/wall_material.tres" id="7_dknka"]
+[ext_resource type="Material" uid="uid://ueef0t6eynjx" path="res://resources/materials/metal_material.tres" id="7_dvmea"]
+[ext_resource type="Material" uid="uid://l3m5iiix5hbf" path="res://resources/materials/wood_material.tres" id="7_p33lc"]
+[ext_resource type="Texture2D" uid="uid://c1p6od2eqi7tv" path="res://resources/ui/textures/vignette.png" id="8_f74bs"]
 [ext_resource type="FontFile" uid="uid://b7yx4xufr5lwh" path="res://resources/ui/fonts/Mate-Regular.ttf" id="9_8tx1a"]
-[ext_resource type="Texture2D" uid="uid://r6dydur0vlkn" path="res://resources/ui/textures/vignette_smaller.png" id="10_ylysu"]
+[ext_resource type="Texture2D" uid="uid://bt4p7oxhpcsag" path="res://resources/textures/blossom1.jpg" id="9_jhx03"]
+[ext_resource type="LabelSettings" uid="uid://dko8mwn4stl3n" path="res://resources/ui/settings/mockup_bars.tres" id="10_l1fbi"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8xxwv"]
-sky_top_color = Color(0.51985, 0.105964, 0.9485, 1)
-sky_horizon_color = Color(0.513674, 0.731503, 0.761015, 1)
-sky_curve = 0.135189
-sky_cover_modulate = Color(0.74978, 0.74978, 0.74978, 1)
-ground_bottom_color = Color(0.178947, 0.192259, 0.27076, 1)
-ground_horizon_color = Color(0.0698609, 0.405287, 0.478132, 1)
-ground_curve = 0.0207053
-ground_energy_multiplier = 0.7
-sun_angle_max = 16.4
-sun_curve = 0.243676
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3rj7i"]
+sky_top_color = Color(0.277668, 0.576819, 0.923394, 1)
+sky_horizon_color = Color(0.666464, 0.780009, 0.86907, 1)
+sky_curve = 0.045448
+ground_bottom_color = Color(0.0429018, 0.269323, 0.192819, 1)
+ground_horizon_color = Color(0.14003, 0.492425, 0.423078, 1)
+ground_curve = 0.0348223
+sun_angle_max = 36.73
+sun_curve = 0.15529
 
-[sub_resource type="Sky" id="Sky_l7qwa"]
-sky_material = SubResource("ProceduralSkyMaterial_8xxwv")
-process_mode = 1
-radiance_size = 4
+[sub_resource type="Sky" id="Sky_h35ex"]
+sky_material = SubResource("ProceduralSkyMaterial_3rj7i")
+radiance_size = 1
 
 [sub_resource type="Environment" id="Environment_351mu"]
 background_mode = 2
-background_energy_multiplier = 1.3
-sky = SubResource("Sky_l7qwa")
-tonemap_mode = 2
+sky = SubResource("Sky_h35ex")
+ambient_light_source = 3
+ssao_enabled = true
 glow_enabled = true
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.008
-volumetric_fog_albedo = Color(0.0831376, 0.510721, 0.712802, 1)
-volumetric_fog_emission = Color(0.436623, 0.7694, 0.951465, 1)
-volumetric_fog_detail_spread = 6.0
+volumetric_fog_density = 0.025
+volumetric_fog_sky_affect = 0.0
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_7slkh"]
 
@@ -222,32 +220,20 @@ shadow_mesh = SubResource("ArrayMesh_iipj2")
 radius = 0.36
 height = 1.78
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wc26o"]
-albedo_color = Color(0.099986, 0.099986, 0.099986, 1)
-metallic = 0.41
-roughness = 0.62
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8tvvd"]
 albedo_color = Color(0.333162, 0.835438, 0.517807, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i717o"]
-albedo_color = Color(0.58944, 0.635742, 1, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q5onr"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 3.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_naaqw"]
-albedo_color = Color(0.678449, 0.55266, 1, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2b0gr"]
-albedo_color = Color(0.413087, 0.652326, 0.975753, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3sgmi"]
-albedo_color = Color(0.0403187, 0.71479, 0.879905, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukcrq"]
-albedo_color = Color(0.437112, 1, 0.654131, 1)
-metallic = 1.0
-roughness = 0.1
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8fc1"]
+albedo_texture = ExtResource("9_jhx03")
+roughness = 0.8
 
 [sub_resource type="LabelSettings" id="LabelSettings_yos7h"]
+font = ExtResource("9_8tx1a")
 font_size = 32
 
 [sub_resource type="LabelSettings" id="LabelSettings_i76gu"]
@@ -262,19 +248,27 @@ font_size = 65
 font = ExtResource("9_8tx1a")
 font_size = 18
 
+[sub_resource type="LabelSettings" id="LabelSettings_q3mym"]
+line_spacing = 5.0
+font = ExtResource("9_8tx1a")
+font_size = 28
+
 [node name="World" type="Node3D"]
 
 [node name="sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.861961, -0.372048, -0.344387, -0.0617186, -0.59724, 0.799684, -0.503202, 0.710553, 0.491835, 0, 0, 0)
 shadow_enabled = true
-directional_shadow_mode = 0
+shadow_bias = 0.05
+shadow_opacity = 0.9
+shadow_blur = 1.2
+directional_shadow_blend_splits = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_351mu")
 camera_attributes = SubResource("CameraAttributesPractical_7slkh")
 
 [node name="Player" type="CharacterBody3D" parent="."]
-script = ExtResource("1_dccl0")
+script = ExtResource("1_dwth8")
 
 [node name="Head" type="Node3D" parent="Player"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.7, 0)
@@ -312,155 +306,142 @@ target_position = Vector3(0, 0, 0)
 
 [node name="FootstepSound" type="AudioStreamPlayer" parent="Player"]
 stream = ExtResource("5_lnfdh")
-volume_db = -5.0
+volume_db = -25.0
 
 [node name="LevelGeometry" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.826e-06, 0, -0.44243)
 
-[node name="wall1" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.156969, 0.154722, 4.98284)
-visible = false
+[node name="Floor" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.004, -0.5, -20.7487)
 use_collision = true
-size = Vector3(26.4445, 2, 1)
-material = ExtResource("2_3taea")
-
-[node name="wall2" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.127338, 0.154722, -43.244)
-visible = false
-use_collision = true
-size = Vector3(26.6854, 2, 1)
-material = ExtResource("2_3taea")
-
-[node name="wall3" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 12.2126, -0.0158787, -19.1052)
-visible = false
-use_collision = true
-size = Vector3(51.1705, 2, 1)
-material = ExtResource("2_3taea")
-
-[node name="wall4" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -12.0647, 0.00925636, -19.3094)
-visible = false
-use_collision = true
-size = Vector3(51.0319, 2, 1)
-material = ExtResource("2_3taea")
-
-[node name="roof" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, -1.06247, 4.00762, -11.5595)
-use_collision = true
-size = Vector3(6.78987, 0.132538, 3.46497)
-material = SubResource("StandardMaterial3D_wc26o")
-
-[node name="pillar1" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(0.00977365, 0.999952, -5.24536e-07, -0.999952, 0.00977365, 0, 5.12664e-09, 5.24511e-07, 1, -4.3343, 1.83562, -13.0518)
-use_collision = true
-size = Vector3(4.22262, 0.2, 0.2)
-material = SubResource("StandardMaterial3D_wc26o")
-
-[node name="pillar2" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -4.25094, 1.6825, -10.034)
-use_collision = true
-size = Vector3(4.66939, 0.2, 0.2)
-material = SubResource("StandardMaterial3D_wc26o")
-
-[node name="floor" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.004, -0.5, -19.071)
-use_collision = true
-size = Vector3(24, 1, 48)
+size = Vector3(16, 1, 44.6445)
 material = SubResource("StandardMaterial3D_8tvvd")
 
-[node name="box3" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.10867, 1.46038, -8.0963)
+[node name="Barrier" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 1.06581e-14, 0, -1.06581e-14, 1, 0, 0, 0, 1, -2.15372, 0.7, -6.74328)
 use_collision = true
-size = Vector3(1, 3, 1)
-material = SubResource("StandardMaterial3D_i717o")
+size = Vector3(11.8428, 1.4, 0.2)
+material = ExtResource("7_p33lc")
 
-[node name="box4" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.21476, 1.95431, -11.3577)
+[node name="BarrierPlank" type="CSGBox3D" parent="LevelGeometry/Barrier"]
+transform = Transform3D(-3.94227e-08, -1.88823e-08, 1, -0.431976, 0.901885, 1.22186e-28, -0.901885, -0.431976, -4.37114e-08, -0.835367, 0.0711166, -1.51409)
 use_collision = true
-size = Vector3(4, 4, 4)
-material = SubResource("StandardMaterial3D_naaqw")
+size = Vector3(3.40125, 0.1, 1)
+material = ExtResource("7_p33lc")
 
-[node name="box2" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59003, 0.95442, -6.62835)
+[node name="BoxBig" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.522, 1.75, -8.6825)
 use_collision = true
-size = Vector3(1, 2, 1)
-material = SubResource("StandardMaterial3D_2b0gr")
+size = Vector3(3.505, 3.5, 2)
+material = ExtResource("7_dvmea")
 
-[node name="box1" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(0.999989, -0.0046251, 0, 0.0046251, 0.999989, 0, 0, 0, 1, -0.730936, 0.45722, -6.08873)
+[node name="BoxMid" type="CSGBox3D" parent="LevelGeometry/BoxBig"]
+transform = Transform3D(1, 6.10641e-17, 0, -3.01916e-17, 1, 4.65661e-10, 0, -4.65661e-10, 1, -2.62895, -0.55, -0.890624)
 use_collision = true
-material = SubResource("StandardMaterial3D_3sgmi")
+size = Vector3(1, 2.4, 1)
+material = ExtResource("7_dvmea")
 
-[node name="roof2" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(0.99904, -0.0407019, -0.0161959, 0.03869, 0.993232, -0.109512, 0.0205437, 0.10878, 0.993853, -0.486759, 7.33532, -21.9372)
+[node name="BoxSmall" type="CSGBox3D" parent="LevelGeometry/BoxBig"]
+transform = Transform3D(1, 2.0217e-10, 4.83169e-13, 0, 0.999989, 0.0046251, 2.89901e-12, -0.0046251, 0.999989, -3.90222, -1.13386, -1.51876)
 use_collision = true
-size = Vector3(11.0121, 0.132538, 2.58933)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(1, 1.2, 1)
+material = ExtResource("7_dvmea")
 
-[node name="pillar3" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 4.65547, 2.90813, -20.795)
+[node name="Plank" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 0.890848, -0.454301, 0, 0.454301, 0.890847, 3.008, 5.04148, -13.237)
 use_collision = true
-size = Vector3(9.09789, 0.2, 0.2)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(0.864395, 0.0706635, 6.67091)
+material = ExtResource("7_p33lc")
 
-[node name="pillar4" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -5.75098, 3.23299, -22.9648)
+[node name="Walkway" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(-1, 0, 2.62268e-07, 0, 1, 0, -2.62268e-07, 0, -1, -1.4262, 6.5, -17.1865)
 use_collision = true
-size = Vector3(8.05104, 0.2, 0.2)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(11.6536, 0.05, 2)
+material = ExtResource("7_dvmea")
 
-[node name="pillar5" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1.31134e-07, 1, 0, -1, 1.31134e-07, 0, 0, 0, 1, 4.79602, 3.33633, -22.9178)
+[node name="LimboBar" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(4.37114e-08, 8.74227e-08, -1, 0, -1, -8.74227e-08, -1, 0, -4.37114e-08, -0.805, 8.01242, -17.186)
 use_collision = true
-size = Vector3(8.70457, 0.2, 0.2)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(2, 0.5, 1)
+material = ExtResource("7_p33lc")
 
-[node name="pillar6" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1.31134e-07, 1, 0, -1, 1.31134e-07, 0, 0, 0, 1, -4.9997, 2.96212, -21.2164)
+[node name="JumpPlane" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, -6.73316, 7.33532, -20.8487)
 use_collision = true
-size = Vector3(8.23399, 0.2, 0.2)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(2, 0.1, 2)
+material = ExtResource("7_dvmea")
 
-[node name="roof3" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(0.28085, 0.407126, -0.869131, -2.68221e-07, 0.90557, 0.424199, 0.959751, -0.119136, 0.254329, 4.21857, 1.97969, -34.3575)
+[node name="JumpPlane2" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906307, -5.74395, 7.96611, -24.5848)
 use_collision = true
-size = Vector3(0.213366, 0.115219, 12.2706)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(5.61084, 0.1, 2)
+material = ExtResource("7_dvmea")
 
-[node name="roof4" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(0.503669, 0.863897, 0, -0.863897, 0.503669, 0, 0, 0, 1, 2.33352, 3.47311, -11.4949)
-visible = false
-size = Vector3(0.269903, 0.159599, 3.2802)
-material = SubResource("StandardMaterial3D_wc26o")
-
-[node name="roof5" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-1, 2.21106e-07, 7.55098e-07, 0, 0.959702, -0.281018, -7.86804e-07, -0.281018, -0.959702, -1.0607, 5.93867, -28.0632)
+[node name="WalkPole" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(0.906308, -0.0985506, -0.410967, 0, 0.972431, -0.233191, 0.422618, 0.211343, 0.881321, -1.41306, 9.38094, -29.6008)
 use_collision = true
-size = Vector3(0.461633, 0.217636, 10.2537)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(0.05, 0.05, 9.69224)
+material = ExtResource("7_dvmea")
 
-[node name="roof6" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(0.987242, -2.08616e-07, -0.159227, -0.0654708, 0.911554, -0.405934, 0.145144, 0.41118, 0.899924, -0.230994, 5.59428, -16.7703)
+[node name="WalkwayUp" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.964687, 0.263404, 0, -0.263402, 0.964694, 2.31841, 12.3401, -26.2832)
 use_collision = true
-size = Vector3(0.864395, 0.0706635, 8.55509)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(0.5, 0.1, 17.5542)
+material = ExtResource("7_dvmea")
 
-[node name="limbo_bar" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(-1, 8.74227e-08, 0, -8.74227e-08, -1, 0, 0, 0, 1, -5.77952, 1.91, -6.83716)
+[node name="WallS" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.457, 7.14326, 1.96)
+material_override = ExtResource("7_dknka")
 use_collision = true
-size = Vector3(2.13696, 0.2, 0.694311)
-material = SubResource("StandardMaterial3D_wc26o")
+size = Vector3(23.164, 16.3135, 1)
+material = ExtResource("7_dknka")
 
-[node name="TestBox" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.80432, 1.43037, -4.23406)
-material_override = SubResource("StandardMaterial3D_ukcrq")
-size = Vector3(0.15, 0.15, 0.15)
+[node name="WallW" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.591, 8.293, -19.309)
+use_collision = true
+size = Vector3(51.032, 19.5786, 1)
+material = ExtResource("7_dknka")
 
-[node name="BigBoner" parent="." instance=ExtResource("3_x0xow")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -1.88475, -119.258, -147.074)
+[node name="WallN" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.127, 7.58101, -34.965)
+use_collision = true
+size = Vector3(26.685, 15.438, 1)
+material = ExtResource("7_dknka")
+
+[node name="WallE" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 4.2, 7.56367, -16.231)
+use_collision = true
+size = Vector3(41, 15.4727, 1)
+material = ExtResource("7_dknka")
+
+[node name="WallE2" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(3.05979e-07, 0, 1, 0, 1, 0, -1, 0, 3.05979e-07, 4.4, 9.61748, -19.167)
+use_collision = true
+size = Vector3(43.607, 15, 1)
+material = ExtResource("7_dknka")
+
+[node name="GlowBox" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1049, 4.29905, -31.9454)
+use_collision = true
+material = SubResource("StandardMaterial3D_q5onr")
+
+[node name="ShadeBox" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.100456, 3.17396, -30.4518)
+use_collision = true
+material = ExtResource("7_dknka")
+
+[node name="Picture" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65439, 5.38788, 1.42683)
+use_collision = true
+size = Vector3(10, 10, 0.01)
+material = SubResource("StandardMaterial3D_o8fc1")
 
 [node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Vignette" type="TextureRect" parent="UI"]
+offset_right = 1280.0
+offset_bottom = 720.0
+texture = ExtResource("8_f74bs")
 
 [node name="DefaultCrosshair" type="TextureRect" parent="UI"]
 anchors_preset = 8
@@ -479,20 +460,20 @@ texture = ExtResource("5_4ong7")
 stretch_mode = 3
 
 [node name="MovementStatus" type="Label" parent="UI"]
-offset_left = 722.0
-offset_top = 636.0
-offset_right = 1101.0
-offset_bottom = 681.0
+offset_left = 883.0
+offset_top = 663.0
+offset_right = 1262.0
+offset_bottom = 708.0
 text = "movement status"
 label_settings = SubResource("LabelSettings_yos7h")
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="StandingMessage" type="Label" parent="UI"]
-offset_left = 661.0
-offset_top = 590.0
-offset_right = 1102.0
-offset_bottom = 643.0
+offset_left = 422.0
+offset_top = 553.0
+offset_right = 863.0
+offset_bottom = 606.0
 label_settings = SubResource("LabelSettings_i76gu")
 horizontal_alignment = 2
 vertical_alignment = 2
@@ -502,26 +483,75 @@ offset_left = 34.0
 offset_top = 29.0
 offset_right = 1247.0
 offset_bottom = 176.0
-text = "video game title"
+text = "skeleton game"
 label_settings = SubResource("LabelSettings_4350s")
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PlayGuide" type="Label" parent="UI"]
-offset_left = 1122.0
-offset_top = 550.0
-offset_right = 1238.0
-offset_bottom = 677.0
+offset_left = 22.0
+offset_top = 548.0
+offset_right = 138.0
+offset_bottom = 701.0
 text = "WASD to move
-Shift to sprint
 Space to jump
 Ctrl to crouch
-Esc to exit"
+Shift to sprint
+Esc to exit
+N to noclip"
 label_settings = SubResource("LabelSettings_ukpuw")
 vertical_alignment = 2
 
-[node name="Vignette" type="TextureRect" parent="UI"]
-visible = false
-offset_right = 1280.0
-offset_bottom = 720.0
-texture = ExtResource("10_ylysu")
+[node name="placeholderHP" type="Label" parent="UI"]
+offset_left = 42.0
+offset_top = -97.0
+offset_right = 98.0
+offset_bottom = 334.0
+text = "💀
+💀
+💀
+💀
+💀
+💀
+💀"
+label_settings = SubResource("LabelSettings_q3mym")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="placeholderVis" type="Label" parent="UI/placeholderHP"]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 235.0
+offset_right = 68.0
+offset_bottom = 423.0
+text = "v
+i
+s
+i
+b
+i
+l
+i
+t
+y"
+label_settings = ExtResource("10_l1fbi")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="placeholderAud" type="Label" parent="UI/placeholderHP"]
+layout_mode = 0
+offset_left = -12.0
+offset_top = 235.0
+offset_bottom = 423.0
+text = "a
+u
+d
+i
+b
+i
+l
+i
+t
+y"
+label_settings = ExtResource("10_l1fbi")
+vertical_alignment = 2

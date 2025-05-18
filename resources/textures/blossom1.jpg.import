@@ -2,26 +2,27 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1p6od2eqi7tv"
-path="res://.godot/imported/vignette.png-af1de99ec4d7e90ce8e6e331f4ca09e1.ctex"
+uid="uid://bt4p7oxhpcsag"
+path.s3tc="res://.godot/imported/blossom1.jpg-5b73fb350a817f0b09de7a9677fccb97.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://resources/ui/textures/vignette.png"
-dest_files=["res://.godot/imported/vignette.png-af1de99ec4d7e90ce8e6e331f4ca09e1.ctex"]
+source_file="res://resources/textures/blossom1.jpg"
+dest_files=["res://.godot/imported/blossom1.jpg-5b73fb350a817f0b09de7a9677fccb97.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -30,5 +31,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=1280
-detect_3d/compress_to=1
+process/size_limit=0
+detect_3d/compress_to=0
