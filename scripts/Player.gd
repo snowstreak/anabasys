@@ -9,6 +9,8 @@ const CROUCH_SPEED = 1.5
 const JUMP_VELOCITY = 7.2 # can jump 1.2m, can't 1.3
 const MAX_STEP_HEIGHT = 0.3
 const BASE_TIME_WALKED = 0.0
+const GROUND_DECEL_TIME = 10.0
+const AIR_DECEL_TIME = 8.0
 
 # World
 const BASE_GRAVITY = 24
@@ -20,6 +22,7 @@ const SENSITIVITY = 0.0028
 const BASE_BOB_FREQUENCY = 3.5
 const BASE_BOB_AMPLITUDE = 0.025
 const SPRINT_BOB_APLITUDE = BASE_BOB_AMPLITUDE * 2.0
+const CROUCH_BOB_AMPLITUDE = BASE_BOB_AMPLITUDE * 0.8
 
 # Weapon Sway
 const SWAY_IDLE_FREQ = 0.75 / 4
@@ -52,7 +55,7 @@ var player_state = PlayerState.STANDING
 # region Variables
 
 # Testing
-var limbo_height = 6.5 + 0.05 + 1.1 - 0.5
+var limbo_height = 7.15
 var is_noclipping = false
 
 # Movement
@@ -67,6 +70,7 @@ var bob_frequency = BASE_BOB_FREQUENCY
 var bob_amplitude = BASE_BOB_AMPLITUDE
 var step_number = 0.0
 var gravity = BASE_GRAVITY
+var is_jumping_from_floor = false # Flag to prevent time_walked update during jump
 
 # UI
 var fade_duration = 0.2
@@ -91,6 +95,7 @@ var fade_duration = 0.2
 
 # Testing
 @onready var limbo_bar = $"../LevelGeometry/LimboBar"
+@onready var shade_box = $"../LevelGeometry/ShadeBox"
 
 # Level
 @onready var glow_box = $"../LevelGeometry/GlowBox"
@@ -193,19 +198,19 @@ func _process(delta: float) -> void:
 	# Update player properties based on state (visual/audio parameters)
 	match player_state:
 		PlayerState.STANDING:
-			bob_frequency = BASE_BOB_FREQUENCY
+			# bob_frequency = BASE_BOB_FREQUENCY
 			bob_amplitude = BASE_BOB_AMPLITUDE
 			head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
 		PlayerState.CROUCHING:
-			bob_frequency = BASE_BOB_FREQUENCY * 0.7 # Adjust bobbing for crouch
-			bob_amplitude = BASE_BOB_AMPLITUDE * 0.5 # Adjust bobbing for crouch
+			# bob_frequency = BASE_BOB_FREQUENCY * 0.7 # Adjust bobbing for crouch
+			bob_amplitude = CROUCH_BOB_AMPLITUDE # Adjust bobbing for crouch
 			head.transform.origin.y = lerpf(head.transform.origin.y, CROUCH_EYE_HEIGHT, delta * 10)
 			if not _can_stand_up():
 				_show_permanent_stand_error_message("No space above to stand up")
 			else:
 				standing_message_label.hide()
 		PlayerState.SPRINTING:
-			bob_frequency = BASE_BOB_FREQUENCY * 1.2 # Adjust bobbing for sprint
+			# bob_frequency = BASE_BOB_FREQUENCY * 1.2 # Adjust bobbing for sprint
 			bob_amplitude = SPRINT_BOB_APLITUDE
 			head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
 
@@ -260,11 +265,7 @@ func _physics_process(delta: float) -> void:
 		# Handle jump.
 		if Input.is_action_just_pressed("jump") and is_on_floor():
 			velocity.y = JUMP_VELOCITY
-			# waits two frames then resets bobbing and footsteps
-			# the engine momentarily considers me on the ground for some reason
-			await get_tree().process_frame
-			await get_tree().process_frame
-			time_walked = BASE_TIME_WALKED
+			is_jumping_from_floor = true # Set flag when jumping from floor
 
 		# Update player properties based on state (physics parameters)
 		match player_state:
@@ -291,21 +292,28 @@ func _physics_process(delta: float) -> void:
 				velocity.z = direction.z * current_speed
 			else:
 				# Apply deceleration when no input is given.
-				velocity.x = lerp(velocity.x, direction.x * current_speed, delta * 10.0)
-				velocity.z = lerp(velocity.z, direction.z * current_speed, delta * 10.0)
+				velocity.x = lerp(velocity.x, direction.x * current_speed, delta * GROUND_DECEL_TIME)
+				velocity.z = lerp(velocity.z, direction.z * current_speed, delta * GROUND_DECEL_TIME)
 		else:
 			# Apply deceleration when not on the floor.
-			velocity.x = lerp(velocity.x, direction.x * current_speed, delta * 8.0)
-			velocity.z = lerp(velocity.z, direction.z * current_speed, delta * 8.0)
+			# TODO could be done with _is_on_floor()
+			velocity.x = lerp(velocity.x, direction.x * current_speed, delta * AIR_DECEL_TIME)
+			velocity.z = lerp(velocity.z, direction.z * current_speed, delta * AIR_DECEL_TIME)
 
-		# Update time_walked based on velocity (physics-dependent)
-		time_walked += velocity.length() * delta * float(is_on_floor())
+		# Update time_walked based on velocity (physics-dependent), only if not jumping from floor
+		if not is_jumping_from_floor:
+			time_walked += velocity.length() * delta * float(is_on_floor())
 		# Reset time_walked periodically to avoid float overflow, but keep bobbing/footsteps looping smoothly
 		var bob_period = 2 * TAU / bob_frequency # bob_frequency is updated in _process, but used here. This dependency is acceptable.
-		if time_walked > 1000.0:
+		if time_walked > 10.0:
 			time_walked = fmod(time_walked, bob_period)
 
 		move_and_slide()
+
+		# Reset jumping flag and time_walked when landing
+		if is_on_floor() and is_jumping_from_floor:
+			is_jumping_from_floor = false
+			time_walked = BASE_TIME_WALKED
 
 # endregion
 
