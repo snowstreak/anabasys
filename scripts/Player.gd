@@ -55,7 +55,7 @@ var player_state = PlayerState.STANDING
 # region Variables
 
 # Testing
-var limbo_height = 7.15
+# var limbo_height = 
 var is_noclipping = false
 
 # Movement
@@ -71,6 +71,11 @@ var bob_amplitude = BASE_BOB_AMPLITUDE
 var step_number = 0.0
 var gravity = BASE_GRAVITY
 var is_jumping_from_floor = false # Flag to prevent time_walked update during jump
+
+# TODO Stat variables
+
+# Light
+var light_level: float
 
 # UI
 var fade_duration = 0.2
@@ -110,7 +115,7 @@ func _ready():
 
 	knife_base_pos = knife.position
 
-	limbo_bar.position.y = limbo_height + 1
+	# limbo_bar.position.y = limbo_height + 1
 
 	player_collision.shape.height = STANDING_HEIGHT
 
@@ -251,6 +256,14 @@ func _process(delta: float) -> void:
 		_: # Default case for any other state (shouldn't happen with enum)
 			movement_status_label.text = "Error"
 
+	# TODO visibility - don't know how to handle it yet
+	# TODO audability tied to movement speed
+	# TODO health - tied to ui, losing health
+	# TODO UI - health, noise and vis, space above indicator, taking damage indicator, 
+		 # directional "seen" indicator, basic manu
+	# TODO basic throwing physics, falled objects make (adjustable) noise
+	# TODO sounds
+
 # endregion
 
 # region Physics Process
@@ -296,7 +309,6 @@ func _physics_process(delta: float) -> void:
 				velocity.z = lerp(velocity.z, direction.z * current_speed, delta * GROUND_DECEL_TIME)
 		else:
 			# Apply deceleration when not on the floor.
-			# TODO could be done with _is_on_floor()
 			velocity.x = lerp(velocity.x, direction.x * current_speed, delta * AIR_DECEL_TIME)
 			velocity.z = lerp(velocity.z, direction.z * current_speed, delta * AIR_DECEL_TIME)
 
@@ -308,6 +320,9 @@ func _physics_process(delta: float) -> void:
 		if time_walked > 10.0:
 			time_walked = fmod(time_walked, bob_period)
 
+		light_level = get_node("LightDetect").light_level
+		print(light_level)
+		
 		move_and_slide()
 
 		# Reset jumping flag and time_walked when landing

@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://ccjbmg50eku0m"]
+
+[ext_resource type="Script" uid="uid://b5b8wh8nc5g6q" path="res://scripts/light_detect.gd" id="1_6h1l0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ymmj"]
+disable_fog = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_kvc4e"]
+material = SubResource("StandardMaterial3D_5ymmj")
+radius = 0.3
+height = 0.6
+radial_segments = 4
+rings = 1
+
+[sub_resource type="Environment" id="Environment_6h1l0"]
+background_mode = 1
+ambient_light_energy = 0.0
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_5ymmj"]
+exposure_multiplier = 8.0
+
+[node name="LightDetect" type="Node3D"]
+script = ExtResource("1_6h1l0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
+mesh = SubResource("SphereMesh_kvc4e")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(8, 8)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0)
+projection = 1
+size = 0.42
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6h1l0")
+camera_attributes = SubResource("CameraAttributesPractical_5ymmj")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.438121, 0.854414, 0.279334, 0.637187, 0.0759929, 0.766954, 0.634068, 0.514007, -0.577715, 1.94225, -0.157651, 0.778099)
+light_color = Color(0, 0, 0, 1)

@@ -4,7 +4,10 @@
 			"path": ".."
 		},
 		{
-			"path": "../../../Files/Obsidian/Snowvault/Skeleton game"
+			"path": "../../../Files/Obsidian/obsidian_vault/anabasys_notes"
+		},
+		{
+			"path": "../../godot_projects/Godot-Thief-Controller"
 		}
 	],
 	"settings": {
