@@ -46,5 +46,5 @@ environment = SubResource("Environment_6h1l0")
 camera_attributes = SubResource("CameraAttributesPractical_5ymmj")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.438121, 0.854414, 0.279334, 0.637187, 0.0759929, 0.766954, 0.634068, 0.514007, -0.577715, 1.94225, -0.157651, 0.778099)
+transform = Transform3D(-0.438121, 0.854414, 0.279334, 0.637187, 0.0759926, 0.766953, 0.634068, 0.514006, -0.577715, 1.94225, -0.157651, 0.778099)
 light_color = Color(0, 0, 0, 1)

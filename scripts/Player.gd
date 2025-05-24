@@ -3,9 +3,9 @@ extends CharacterBody3D
 # region Constants
 
 # Movement
-const WALK_SPEED = 3.0
+const WALK_SPEED = 2.6 # 3.0
 const SPRINT_SPEED = 4.5
-const CROUCH_SPEED = 1.5
+const CROUCH_SPEED = 1.2
 const JUMP_VELOCITY = 7.2 # can jump 1.2m, can't 1.3
 const MAX_STEP_HEIGHT = 0.3
 const BASE_TIME_WALKED = 0.0
@@ -91,6 +91,7 @@ var fade_duration = 0.2
 @onready var camera = $Head/Camera3D
 @onready var knife = $Head/Camera3D/Knife
 @onready var footstep_sound = $FootstepSound
+@onready var light_detector = $LightDetect
 
 # UI
 @onready var movement_status_label = $"../UI/MovementStatus"
@@ -101,10 +102,10 @@ var fade_duration = 0.2
 # Testing
 @onready var limbo_bar = $"../LevelGeometry/LimboBar"
 @onready var shade_box = $"../LevelGeometry/ShadeBox"
+@onready var vis_label = $"../UI/VisibilityTesting"
 
 # Level
 @onready var glow_box = $"../LevelGeometry/GlowBox"
-
 
 # endregion
 
@@ -182,9 +183,11 @@ func _process(delta: float) -> void:
 	# Handle sprinting.
 	# if the player is pressing the sprint button and not crouching and moving, set the state to sprinting
 	if Input.is_action_pressed("sprint") and player_state != PlayerState.CROUCHING and _moving() and Input.is_action_pressed("move_forward") and is_on_floor():
-		player_state = PlayerState.SPRINTING
+		# player_state = PlayerState.SPRINTING
+		pass
 	elif Input.is_action_just_released("sprint") and player_state == PlayerState.SPRINTING:
-		player_state = PlayerState.STANDING
+		# player_state = PlayerState.STANDING
+		pass
 
 	# If player stops moving forward while sprinting, return to standing
 	if (Input.is_action_just_released("move_forward") or Input.is_action_just_pressed("move_back")) and player_state == PlayerState.SPRINTING:
@@ -317,11 +320,11 @@ func _physics_process(delta: float) -> void:
 			time_walked += velocity.length() * delta * float(is_on_floor())
 		# Reset time_walked periodically to avoid float overflow, but keep bobbing/footsteps looping smoothly
 		var bob_period = 2 * TAU / bob_frequency # bob_frequency is updated in _process, but used here. This dependency is acceptable.
-		if time_walked > 10.0:
+		if time_walked > 1000.0:
 			time_walked = fmod(time_walked, bob_period)
 
-		light_level = get_node("LightDetect").light_level
-		print(light_level)
+		light_level = light_detector.light_level
+		vis_label.text = str(snapped(light_level, 0.01))
 		
 		move_and_slide()
 
@@ -348,7 +351,7 @@ func _footstep(time) -> float:
 	var step = 0.0
 	step = cos(time * bob_frequency) * bob_amplitude
 	# Snapped value + offset for footstep trigger logic
-	return snapped(100 * step, 0.01) + 2.5
+	return snapped(100 * step, 0.01)
 
 func _can_stand_up() -> bool:
 	var space_needed = STANDING_HEIGHT - CROUCH_HEIGHT - 0.01
