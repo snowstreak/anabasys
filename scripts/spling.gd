@@ -72,8 +72,6 @@ var step_number = 0.0
 var gravity = BASE_GRAVITY
 var is_jumping_from_floor = false # Flag to prevent time_walked update during jump
 
-# TODO Stat variables
-
 # Light
 var light_level: float
 
@@ -259,13 +257,9 @@ func _process(delta: float) -> void:
 		_: # Default case for any other state (shouldn't happen with enum)
 			movement_status_label.text = "Error"
 
-	# TODO visibility - don't know how to handle it yet
-	# TODO audability tied to movement speed
 	# TODO health - tied to ui, losing health
-	# TODO UI - health, noise and vis, space above indicator, taking damage indicator, 
-		 # directional "seen" indicator, basic manu
+	# TODO UI - health, vis, space above indicator, taking damage indicator, directional "seen" indicator, basic main manu
 	# TODO basic throwing physics, falled objects make (adjustable) noise
-	# TODO sounds
 
 # endregion
 
@@ -324,7 +318,7 @@ func _physics_process(delta: float) -> void:
 			time_walked = fmod(time_walked, bob_period)
 
 		light_level = light_detector.light_level
-		vis_label.text = str(snapped(light_level, 0.01))
+		vis_label.text = str(snapped(light_level * 100, 1))
 		
 		move_and_slide()
 
