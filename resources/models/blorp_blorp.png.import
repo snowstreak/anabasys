@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvcojbvcnhwte"
-path.s3tc="res://.godot/imported/shadow.png-9b7ee364caa927f96e36c4dcd8f4d0f8.s3tc.ctex"
+uid="uid://b8tu6plo2pcyq"
+path.s3tc="res://.godot/imported/blorp_blorp.png-f0331bf37ecbb534e6e6a2308d67b192.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "9aa4827ef984ef9291bd1ef5b50ebcce"
+}
 
 [deps]
 
-source_file="res://resources/textures/shadow.png"
-dest_files=["res://.godot/imported/shadow.png-9b7ee364caa927f96e36c4dcd8f4d0f8.s3tc.ctex"]
+source_file="res://resources/models/blorp_blorp.png"
+dest_files=["res://.godot/imported/blorp_blorp.png-f0331bf37ecbb534e6e6a2308d67b192.s3tc.ctex"]
 
 [params]
 

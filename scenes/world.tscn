@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=4 uid="uid://d4b6bgok5w8nj"]
+[gd_scene load_steps=53 format=4 uid="uid://d4b6bgok5w8nj"]
 
 [ext_resource type="Script" uid="uid://cfouaospxm7sw" path="res://scripts/player.gd" id="1_dwth8"]
 [ext_resource type="Texture2D" uid="uid://dce6ouuw4c5u3" path="res://resources/models/skele_hand_SkelyDraugr_2_Color.png" id="2_03gva"]
@@ -10,10 +10,11 @@
 [ext_resource type="Material" uid="uid://c3idwms3hh1jx" path="res://resources/materials/wall_material.tres" id="7_dknka"]
 [ext_resource type="Material" uid="uid://ueef0t6eynjx" path="res://resources/materials/metal_material.tres" id="7_dvmea"]
 [ext_resource type="Material" uid="uid://l3m5iiix5hbf" path="res://resources/materials/wood_material.tres" id="7_p33lc"]
+[ext_resource type="Texture2D" uid="uid://b8tu6plo2pcyq" path="res://resources/models/blorp_blorp.png" id="7_xo05s"]
 [ext_resource type="Texture2D" uid="uid://c1p6od2eqi7tv" path="res://resources/ui/textures/vignette.png" id="8_f74bs"]
 [ext_resource type="Material" uid="uid://ek8gdoa35q8p" path="res://resources/materials/glowbox.tres" id="8_o8fc1"]
 [ext_resource type="FontFile" uid="uid://b7yx4xufr5lwh" path="res://resources/ui/fonts/Mate-Regular.ttf" id="9_8tx1a"]
-[ext_resource type="LabelSettings" uid="uid://dko8mwn4stl3n" path="res://resources/ui/settings/mockup_bars.tres" id="10_l1fbi"]
+[ext_resource type="FontFile" uid="uid://bm3kkw8be6pf4" path="res://resources/ui/settings/UI_main_size.tres" id="16_dss4m"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jhx03"]
 sky_top_color = Color(0.115674, 0.146523, 0.189422, 1)
@@ -204,9 +205,8 @@ shadow_mesh = SubResource("ArrayMesh_iipj2")
 radius = 0.36
 height = 1.78
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jhx03"]
-radius = 0.3
-height = 1.8
+[sub_resource type="SphereShape3D" id="SphereShape3D_dss4m"]
+radius = 0.9
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c8pp0"]
 
@@ -243,18 +243,61 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_x5bca")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o8fc1"]
-radius = 3.56907
+radius = 4.60273
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xo05s"]
-radius = 9.86031
+radius = 8.57942
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gfwpl"]
+resource_name = "blorp"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("7_xo05s")
+roughness = 0.5
+texture_repeat = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_yxpgs"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
+"name": "blorp",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAAP//AAD//wAAAAAAAP//AAD//wAAAAAAAAAAAAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_dss4m"]
+resource_name = "blorp_blorp"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"attribute_data": PackedByteArray("AAD/////AAD/////AAAAAA=="),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
+"material": SubResource("StandardMaterial3D_gfwpl"),
+"name": "blorp",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAAP///7///wAAAAD/v///AAD///+/AAAAAAAA/7////9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_yxpgs")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_xo05s"]
+points = PackedVector3Array(0, 0, 0, -3, 3, 10, 3, 3, 10, -3, -3, 10, 3, -3, 10)
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_o8fc1"]
-vertices = PackedVector3Array(-7.2695, 0.0183101, -1.0322, -7.2695, 0.0183101, 33.1678, -5.4695, 0.0183101, 33.1678, -5.4695, 0.0183101, -1.0322, 4.5305, 0.0183101, 2.3678, 4.5305, 0.0183101, 3.1678, 6.1305, 0.0183101, 3.1678, 3.9305, 0.0183101, 1.7678, 6.1305, 0.0183101, -1.0322, -2.6695, 0.0183101, -1.0322, -2.6695, 0.0183101, 1.7678, 4.5305, 0.0183101, 3.9678, 3.9305, 0.0183101, 4.5678, 6.1305, 0.0183101, 15.5678, -2.6695, 0.0183101, 4.5678, -2.6695, 0.0183101, 15.5678, 5.5305, 0.0183101, 17.7678, 6.1305, 0.0183101, 18.3678, 6.1305, 0.0183101, 17.3678, -2.6695, 0.0183101, 17.3678, -2.6695, 0.0183101, 17.7678, 6.1305, 0.0183101, 33.1678, 6.1305, 0.0183101, 19.1678, 5.5305, 0.0183101, 19.7678, -2.6695, 0.0183101, 33.1678, -2.6695, 0.0183101, 19.7678, -4.2695, 15.3183, 34.3678, -4.2695, 15.3183, 34.7678, -3.8695, 15.3183, 34.7678, -3.8695, 15.3183, 34.3678, -5.4695, 0.0183101, 36.5678, -5.4695, 0.0183101, 35.9678, -7.2695, 0.0183101, 35.9678, -4.8695, 0.0183101, 37.1678, -7.2695, 0.0183101, 41.9678, -3.4695, 0.0183101, 41.9678, -3.4695, 0.0183101, 37.1678, -2.6695, 0.0183101, 36.5678, 6.1305, 0.0183101, 41.9678, 6.1305, 0.0183101, 35.9678, -2.6695, 0.0183101, 35.9678)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1), PackedInt32Array(6, 5, 4), PackedInt32Array(4, 7, 6), PackedInt32Array(6, 7, 8), PackedInt32Array(10, 9, 7), PackedInt32Array(7, 9, 8), PackedInt32Array(11, 5, 6), PackedInt32Array(11, 6, 12), PackedInt32Array(12, 6, 13), PackedInt32Array(14, 12, 15), PackedInt32Array(15, 12, 13), PackedInt32Array(18, 17, 16), PackedInt32Array(20, 19, 16), PackedInt32Array(16, 19, 18), PackedInt32Array(23, 22, 21), PackedInt32Array(25, 23, 24), PackedInt32Array(24, 23, 21), PackedInt32Array(29, 28, 26), PackedInt32Array(26, 28, 27), PackedInt32Array(32, 31, 30), PackedInt32Array(30, 33, 32), PackedInt32Array(32, 33, 34), PackedInt32Array(34, 33, 35), PackedInt32Array(33, 36, 35), PackedInt32Array(36, 37, 35), PackedInt32Array(35, 37, 38), PackedInt32Array(38, 37, 39), PackedInt32Array(37, 40, 39)]
+vertices = PackedVector3Array(-6.8695, 0.0183101, -0.6322, -6.8695, 0.0183101, 32.7678, -5.8695, 0.0183101, 32.7678, -5.8695, 0.0183101, -0.6322, 4.5305, 0.0183101, 1.9678, 4.7305, 0.0183101, 2.9678, 5.7305, 0.0183101, 2.9678, 5.7305, 0.0183101, -0.6322, -2.2695, 0.0183101, -0.6322, -2.2695, 0.0183101, 1.1678, 3.7305, 0.0183101, 1.3678, 4.5305, 0.0183101, 3.9678, 5.7305, 0.0183101, 15.1678, 3.7305, 0.0183101, 4.5678, -2.2695, 0.0183101, 4.7678, -2.2695, 0.0183101, 15.1678, -2.2695, 0.0183101, 20.1678, -2.2695, 0.0183101, 32.7678, 5.7305, 0.0183101, 32.7678, 5.7305, 0.0183101, 19.9678, -4.8695, 0.0183101, 37.5678, -5.8695, 0.0183101, 36.3678, -6.8695, 0.0183101, 36.3678, -6.8695, 0.0183101, 41.5678, 5.7305, 0.0183101, 41.5678, 5.7305, 0.0183101, 36.3678, -3.2695, 0.0183101, 37.5678, -2.2695, 0.0183101, 36.3678)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1), PackedInt32Array(5, 4, 6), PackedInt32Array(6, 4, 7), PackedInt32Array(9, 8, 10), PackedInt32Array(10, 8, 7), PackedInt32Array(7, 4, 10), PackedInt32Array(5, 6, 11), PackedInt32Array(11, 6, 12), PackedInt32Array(14, 13, 15), PackedInt32Array(15, 13, 12), PackedInt32Array(13, 11, 12), PackedInt32Array(17, 16, 18), PackedInt32Array(18, 16, 19), PackedInt32Array(21, 20, 22), PackedInt32Array(22, 20, 23), PackedInt32Array(25, 24, 26), PackedInt32Array(26, 24, 23), PackedInt32Array(26, 23, 20), PackedInt32Array(26, 27, 25)]
 cell_size = 0.2
 cell_height = 0.01
 agent_height = 1.8
-agent_radius = 0.7
+agent_radius = 1.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8tvvd"]
 albedo_color = Color(0.333162, 0.835438, 0.517807, 1)
@@ -288,6 +331,18 @@ font_size = 28
 font = ExtResource("9_8tx1a")
 font_size = 51
 
+[sub_resource type="LabelSettings" id="LabelSettings_xo05s"]
+font = ExtResource("16_dss4m")
+font_size = 46
+
+[sub_resource type="LabelSettings" id="LabelSettings_dss4m"]
+font = ExtResource("9_8tx1a")
+font_size = 22
+
+[sub_resource type="LabelSettings" id="LabelSettings_7t5mc"]
+font = ExtResource("9_8tx1a")
+font_size = 22
+
 [node name="World" type="Node3D"]
 
 [node name="Moon" type="DirectionalLight3D" parent="."]
@@ -306,7 +361,7 @@ sky_mode = 2
 environment = SubResource("Environment_xo05s")
 camera_attributes = SubResource("CameraAttributesPractical_7slkh")
 
-[node name="Player" type="CharacterBody3D" parent="."]
+[node name="Player" type="CharacterBody3D" parent="." groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.15593, 0, -0.0186284)
 script = ExtResource("1_dwth8")
 
@@ -352,10 +407,11 @@ waypoints = [NodePath("../Pos1"), NodePath("../Pos2")]
 
 [node name="EnemyCollision" type="CollisionShape3D" parent="Enemy"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-shape = SubResource("CapsuleShape3D_jhx03")
+shape = SubResource("SphereShape3D_dss4m")
 
 [node name="EnemyMesh" type="MeshInstance3D" parent="Enemy"]
 transform = Transform3D(0.279783, 0, 0, 0, 0.286465, 0, 0, 0, 0.280019, 0, 0, 0)
+visible = false
 mesh = SubResource("ArrayMesh_jhx03")
 skeleton = NodePath("")
 
@@ -366,13 +422,24 @@ one_shot = true
 
 [node name="HearClose" type="Area3D" parent="Enemy"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy/HearClose"]
+[node name="CollisionClose" type="CollisionShape3D" parent="Enemy/HearClose"]
 shape = SubResource("SphereShape3D_o8fc1")
 
 [node name="HearFar" type="Area3D" parent="Enemy"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy/HearFar"]
+[node name="CollisionFar" type="CollisionShape3D" parent="Enemy/HearFar"]
 shape = SubResource("SphereShape3D_xo05s")
+
+[node name="Blorp" type="MeshInstance3D" parent="Enemy"]
+transform = Transform3D(2, -8.74228e-08, 3.82137e-15, 0, -8.74228e-08, -2, 8.74228e-08, 2, -8.74228e-08, 0, 1, 0)
+mesh = SubResource("ArrayMesh_dss4m")
+skeleton = NodePath("")
+
+[node name="Sight" type="Area3D" parent="Enemy"]
+
+[node name="SightCollision" type="CollisionShape3D" parent="Enemy/Sight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.835, 0)
+shape = SubResource("ConvexPolygonShape3D_xo05s")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00848603, 0.0117846, -0.0195422)
@@ -422,9 +489,14 @@ size = Vector3(11.8428, 1.4, 0.17373)
 material = ExtResource("7_p33lc")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0446384, 0.30011, 3.08647)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29, 0.3, 3)
 use_collision = true
-size = Vector3(7.22031, 1, 1)
+size = Vector3(6, 1, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.09568, 1.4111, 3)
+use_collision = true
+size = Vector3(0.5, 2.62219, 0.5)
 
 [node name="LevelGeometry" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.826e-06, 0, -0.44243)
@@ -693,24 +765,23 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PlayGuide" type="Label" parent="UI"]
-offset_left = 22.0
-offset_top = 548.0
-offset_right = 138.0
-offset_bottom = 701.0
-text = "WASD to move
+offset_left = 14.0
+offset_top = 563.0
+offset_right = 139.0
+offset_bottom = 705.0
+text = "WASD to WASD
 Space to jump
 Ctrl to crouch
-Shift to sprint
 Esc to exit
 N to noclip"
 label_settings = SubResource("LabelSettings_ukpuw")
 vertical_alignment = 2
 
 [node name="placeholderHP" type="Label" parent="UI"]
-offset_left = 42.0
-offset_top = -97.0
-offset_right = 98.0
-offset_bottom = 334.0
+offset_left = 11.0
+offset_top = -127.0
+offset_right = 67.0
+offset_bottom = 304.0
 text = "💀
 💀
 💀
@@ -722,53 +793,56 @@ label_settings = SubResource("LabelSettings_q3mym")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="placeholderVis" type="Label" parent="UI/placeholderHP"]
-layout_mode = 0
-offset_left = 56.0
-offset_top = 235.0
-offset_right = 68.0
-offset_bottom = 423.0
-text = "v
-i
-s
-i
-b
-i
-l
-i
-t
-y"
-label_settings = ExtResource("10_l1fbi")
-horizontal_alignment = 2
-vertical_alignment = 2
-
-[node name="placeholderAud" type="Label" parent="UI/placeholderHP"]
-layout_mode = 0
-offset_left = -12.0
-offset_top = 235.0
-offset_bottom = 423.0
-text = "a
-u
-d
-i
-b
-i
-l
-i
-t
-y"
-label_settings = ExtResource("10_l1fbi")
-vertical_alignment = 2
-
 [node name="VisibilityTesting" type="Label" parent="UI"]
-offset_left = 28.0
-offset_top = 360.0
-offset_right = 107.0
-offset_bottom = 423.0
+offset_left = 10.0
+offset_top = 323.0
+offset_right = 89.0
+offset_bottom = 386.0
 text = "VIS"
 label_settings = SubResource("LabelSettings_jhx03")
-horizontal_alignment = 1
+horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="VisibilityTesting2" type="Label" parent="UI"]
+anchors_preset = -1
+anchor_right = 2.257
+anchor_bottom = 1.301
+offset_left = 94.0
+offset_top = 319.0
+offset_right = -2584.96
+offset_bottom = -488.72
+text = "%
+"
+label_settings = SubResource("LabelSettings_jhx03")
+
+[node name="Seen" type="Label" parent="UI"]
+visible = false
+offset_left = -17.0
+offset_top = 401.0
+offset_right = 180.0
+offset_bottom = 475.0
+text = "👁️ yes"
+label_settings = SubResource("LabelSettings_xo05s")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="VisibilityLabel" type="Label" parent="UI"]
+offset_left = 8.0
+offset_top = 298.0
+offset_right = 97.0
+offset_bottom = 357.0
+text = "Visibility:
+"
+label_settings = SubResource("LabelSettings_dss4m")
+
+[node name="VisibleLabel" type="Label" parent="UI"]
+offset_left = 7.0
+offset_top = 390.0
+offset_right = 96.0
+offset_bottom = 449.0
+text = "Visible:
+"
+label_settings = SubResource("LabelSettings_7t5mc")
 
 [node name="Pos1" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.948826, 0.315798, 0, -0.315798, 0.948826, -2.04266, 0, 0.215569)
@@ -777,3 +851,11 @@ transform = Transform3D(1, 0, 0, 0, 0.948826, 0.315798, 0, -0.315798, 0.948826, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75222, -4.76837e-07, 5.79097)
 
 [connection signal="timeout" from="Enemy/PatrolTimer" to="Enemy" method="_on_patrol_timer_timeout"]
+[connection signal="body_entered" from="Enemy/HearClose" to="Enemy" method="_on_hear_close_body_entered"]
+[connection signal="body_exited" from="Enemy/HearClose" to="Enemy" method="_on_hear_close_body_exited"]
+[connection signal="body_entered" from="Enemy/HearFar" to="Enemy" method="_on_hear_far_body_entered"]
+[connection signal="body_exited" from="Enemy/HearFar" to="Enemy" method="_on_hear_far_body_exited"]
+[connection signal="body_entered" from="Enemy/Sight" to="Player" method="_on_sight_body_entered"]
+[connection signal="body_entered" from="Enemy/Sight" to="Enemy" method="_on_sight_body_entered"]
+[connection signal="body_exited" from="Enemy/Sight" to="Player" method="_on_sight_body_exited"]
+[connection signal="body_exited" from="Enemy/Sight" to="Enemy" method="_on_sight_body_exited"]

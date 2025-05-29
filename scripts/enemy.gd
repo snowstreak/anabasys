@@ -56,3 +56,33 @@ func _on_patrol_timer_timeout() -> void:
 		waypoint_index = 0
 	nav_agent.set_target_position(waypoints[waypoint_index].global_position)
 	pass # Replace with function body.
+
+
+func _on_hear_far_body_entered(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		print("player is far")
+
+
+func _on_hear_far_body_exited(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		print("player left far")
+
+
+func _on_hear_close_body_entered(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		print("player is close")
+
+
+func _on_hear_close_body_exited(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		print("player left close")
+
+
+func _on_sight_body_entered(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		print("player can be seen")
+
+
+func _on_sight_body_exited(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		print("player can't be seen anymore")

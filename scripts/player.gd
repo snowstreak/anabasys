@@ -42,10 +42,9 @@ const CROUCH_FOV = 70.0
 
 # endregion
 
-const DEFAULT_PLAY_GUIDE_TEXT = "WASD to move
+const DEFAULT_PLAY_GUIDE_TEXT = "WASD to WASD
 Space to jump
 Ctrl to crouch
-Shift to sprint
 Esc to exit
 N to noclip"
 
@@ -96,6 +95,7 @@ var fade_duration = 0.2
 @onready var standing_message_label = $"../UI/StandingMessage"
 @onready var vignette = $"../UI/Vignette"
 @onready var play_guide = $"../UI/PlayGuide"
+@onready var seen_eye = $"../UI/Seen"
 
 # Testing
 @onready var limbo_bar = $"../LevelGeometry/LimboBar"
@@ -151,7 +151,6 @@ func _process(delta: float) -> void:
 			play_guide.text = "WASD to move
 			Space to go up
 			Ctrl to go down
-			Shift to go faster
 			Esc to exit
 			N to stop noclipping"
 		else:
@@ -402,3 +401,11 @@ func _crouching() -> bool:
 	return player_state == PlayerState.CROUCHING
 
 # endregion
+
+
+func _on_sight_body_entered(body: Node3D) -> void:
+	pass # Replace with function body.
+
+
+func _on_sight_body_exited(body: Node3D) -> void:
+	pass # Replace with function body.
