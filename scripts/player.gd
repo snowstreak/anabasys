@@ -3,9 +3,9 @@ extends CharacterBody3D
 # region Constants
 
 # Movement
-const WALK_SPEED = 3.2 # 3.0
-const SPRINT_SPEED = 4.5 # irrelevant
-const CROUCH_SPEED = 2.0
+const WALK_SPEED = 3.5
+const SPRINT_SPEED = 5.5
+const CROUCH_SPEED = 2.4
 const JUMP_VELOCITY = 7.2 # can jump 1.2m, can't 1.3
 const MAX_STEP_HEIGHT = 0.3 # irrelevant I think ?
 const BASE_TIME_WALKED = 0.0 # declaration
@@ -14,7 +14,6 @@ const AIR_DECEL_TIME = 8.0
 
 # World
 const BASE_GRAVITY = 24
-const CLIMB_SPEED = 2.5 # New constant for climbing speed
 
 # Camera and Mouse
 const SENSITIVITY = 0.0028
@@ -49,9 +48,8 @@ Ctrl to crouch
 Esc to exit
 N to noclip"
 
-enum PlayerState {STANDING, CROUCHING, SPRINTING, CLIMBING}
+enum PlayerState {STANDING, CROUCHING, SPRINTING}
 var player_state = PlayerState.STANDING
-var is_climbing = false
 
 # region Variables
 
@@ -72,7 +70,6 @@ var bob_amplitude = BASE_BOB_AMPLITUDE
 var step_number = 0.0
 var gravity = BASE_GRAVITY
 var is_jumping_from_floor = false # Flag to prevent time_walked update during jump
-var climbable_area: Area3D = null # To store the Area3D of the climbable object
 
 # Light
 var light_level: float
@@ -203,6 +200,11 @@ func _process(delta: float) -> void:
 				player_state = PlayerState.STANDING
 				fade_out()
 
+	# Handle light
+	if Input.is_action_just_pressed("light"):
+		# here be light, later
+		pass
+
 	# Update player properties based on state (visual/audio parameters)
 	match player_state:
 		PlayerState.STANDING:
@@ -261,7 +263,7 @@ func _process(delta: float) -> void:
 
 	# TODO health - tied to ui, losing health
 	# TODO UI - health, vis, space above indicator, taking damage indicator, directional "seen" indicator, basic main manu
-	# TODO basic throwing physics, falled objects make (adjustable) noise
+	# TODO basic throwing physics, fallen objects make (adjustable) noise
 
 # endregion
 
@@ -404,11 +406,3 @@ func _crouching() -> bool:
 	return player_state == PlayerState.CROUCHING
 
 # endregion
-
-
-func _on_sight_body_entered(body: Node3D) -> void:
-	pass # Replace with function body.
-
-
-func _on_sight_body_exited(body: Node3D) -> void:
-	pass # Replace with function body.

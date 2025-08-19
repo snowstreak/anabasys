@@ -1,88 +1,113 @@
 extends CharacterBody3D
 
-enum States {
-	PATROL,
-	IDLE,
-	INVESTIGATE,
-	FIGHT
-}
-
-var current_state: States
-var waypoint_index: int
-
-@onready var nav_agent := $EnemyNavAgent
-@onready var patrol_timer := $PatrolTimer
+enum EnemyState {PATROLLING, WAITING, INVESTIGATING, HUNTING}
 
 @export var waypoints: Array[Marker3D]
-@export var speed = 2
+@export var speed = 3
+
+var enemy_state = EnemyState.PATROLLING
+var wp_index: int
+
+var player_in_earshot_far: bool
+var player_in_earshot_close: bool
+var player_in_sight_far: bool
+var player_in_sight_close: bool
+
+@onready var navigation_agent = $NavigationAgent3D
+@onready var patrol_timer = $PatrolTimer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	current_state = States.PATROL
-	nav_agent.set_target_position(waypoints[0].global_position)
-	pass # Replace with function body.
+	navigation_agent.set_target_position(waypoints[0].global_position)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	match current_state:
-		States.PATROL:
-			if nav_agent.is_navigation_finished():
-				current_state = States.IDLE
+	match enemy_state:
+		EnemyState.PATROLLING:
+			if navigation_agent.is_navigation_finished():
+				enemy_state = EnemyState.WAITING
 				patrol_timer.start()
 				return
-			var target_pos = nav_agent.get_next_path_position()
-			var direction = global_position.direction_to(target_pos)
-			face_direction(delta, direction)
+			var target_position = navigation_agent.get_next_path_position()
+			var direction = global_position.direction_to(target_position)
+			face_direction(target_position)
 			velocity = direction * speed
 			move_and_slide()
 			pass
-		States.IDLE:
+		EnemyState.WAITING:
 			pass
-		States.INVESTIGATE:
+		EnemyState.INVESTIGATING:
 			pass
-		States.FIGHT:
+		EnemyState.HUNTING:
 			pass
 	pass
 
-func face_direction(delta, direction: Vector3):
-	if direction.length_squared() > 0:
-		var targetRotation = atan2(direction.x, direction.z)
-		rotation.y = lerp_angle(rotation.y, targetRotation, delta * 10)
+func check_for_player():
+	pass
+
+func face_direction(direction: Vector3):
+	look_at(Vector3(direction.x, global_position.y, direction.z), Vector3.UP)
 
 func _on_patrol_timer_timeout() -> void:
-	current_state = States.PATROL
-	waypoint_index += 1
-	if waypoint_index > waypoints.size() - 1:
-		waypoint_index = 0
-	nav_agent.set_target_position(waypoints[waypoint_index].global_position)
+	enemy_state = EnemyState.PATROLLING
+	wp_index += 1
+	if wp_index > waypoints.size() - 1:
+		wp_index = 0
+	navigation_agent.set_target_position(waypoints[wp_index].global_position)
 	pass # Replace with function body.
 
 
-func _on_hear_far_body_entered(body: Node3D) -> void:
+func _on_hearing_far_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Player"):
-		print("player is far")
+		player_in_earshot_far = true
+		print("Far hearing entered")
+	pass # Replace with function body.
 
 
-func _on_hear_far_body_exited(body: Node3D) -> void:
+func _on_hearing_far_body_exited(body: Node3D) -> void:
 	if body.is_in_group("Player"):
-		print("player left far")
+		player_in_earshot_far = false
+		print("Far hearing exited")
+	pass # Replace with function body.
 
 
-func _on_hear_close_body_entered(body: Node3D) -> void:
+func _on_hearing_close_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Player"):
-		print("player is close")
+		player_in_earshot_close = true
+		print("Close hearing entered")
+	pass # Replace with function body.
 
 
-func _on_hear_close_body_exited(body: Node3D) -> void:
+func _on_hearing_close_body_exited(body: Node3D) -> void:
 	if body.is_in_group("Player"):
-		print("player left close")
+		player_in_earshot_close = false
+		print("Close hearing exited")
+	pass # Replace with function body.
 
 
-func _on_sight_body_entered(body: Node3D) -> void:
+func _on_sight_close_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Player"):
-		print("player can be seen")
+		player_in_sight_close = true
+		print("Close sight entered")
+	pass # Replace with function body.
 
 
-func _on_sight_body_exited(body: Node3D) -> void:
+func _on_sight_close_body_exited(body: Node3D) -> void:
 	if body.is_in_group("Player"):
-		print("player can't be seen anymore")
+		player_in_sight_close = false
+		print("Close sight exited")
+	pass # Replace with function body.
+
+
+func _on_sight_far_body_entered(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		player_in_sight_far = true
+		print("Far sight entered")
+	pass # Replace with function body.
+
+
+func _on_sight_far_body_exited(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		player_in_sight_far = true
+		print("Far sight exited")
+	pass # Replace with function body.

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjbqdb86w5bi1"]
+
+[ext_resource type="PackedScene" uid="uid://y6577ujv0h3t" path="res://resources/models/crossbow.glb" id="1_6sny2"]
+
+[node name="crossbow" instance=ExtResource("1_6sny2")]
+
+[node name="Cylinder" parent="." index="0"]
+cast_shadow = 0
