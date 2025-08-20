@@ -50,6 +50,8 @@ N to noclip"
 
 enum PlayerState {STANDING, CROUCHING, SPRINTING}
 var player_state = PlayerState.STANDING
+var glowing: bool
+var crouched: bool
 
 # region Variables
 
@@ -202,8 +204,11 @@ func _process(delta: float) -> void:
 
 	# Handle light
 	if Input.is_action_just_pressed("light"):
-		# here be light, later
-		pass
+		if glowing:
+			$AnimationPlayer.play("light_off")
+		else:
+			$AnimationPlayer.play("light_on")
+		glowing = !glowing
 
 	# Update player properties based on state (visual/audio parameters)
 	match player_state:
@@ -254,10 +259,13 @@ func _process(delta: float) -> void:
 	match player_state:
 		PlayerState.CROUCHING:
 			movement_status_label.text = "Crouching"
+			crouched = true
 		PlayerState.SPRINTING:
 			movement_status_label.text = "Sprinting"
+			crouched = false
 		PlayerState.STANDING:
 			movement_status_label.text = "Walking"
+			crouched = false
 		_: # Default case for any other state (shouldn't happen with enum)
 			movement_status_label.text = "Error"
 
@@ -370,9 +378,10 @@ func _show_permanent_stand_error_message(msg: String):
 	standing_message_label.show()
 
 func _show_game_title(duration: float):
-	$"../UI/GameTitle".show()
-	await get_tree().create_timer(duration).timeout
-	$"../UI/GameTitle".hide()
+	pass
+	#$"../UI/GameTitle".show()
+	#await get_tree().create_timer(duration).timeout
+	#$"../UI/GameTitle".hide()
 
 func fade_in():
 	var tween = get_tree().create_tween()

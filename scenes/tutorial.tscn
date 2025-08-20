@@ -1,17 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://b8auq8l6py1fg"]
+[gd_scene load_steps=9 format=3 uid="uid://b8auq8l6py1fg"]
 
+[ext_resource type="Environment" uid="uid://dl50j81e30eci" path="res://resources/environments/environ.tres" id="1_cq4me"]
 [ext_resource type="PackedScene" uid="uid://cbj5alr2lgw7x" path="res://scenes/player.tscn" id="1_ph3nu"]
 [ext_resource type="PackedScene" uid="uid://b4l6baaubryux" path="res://scenes/ui.tscn" id="2_4kmhl"]
 [ext_resource type="PackedScene" uid="uid://derq2b4fl0jsp" path="res://scenes/enemy.tscn" id="3_cq4me"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tbcdj"]
-
-[sub_resource type="Sky" id="Sky_ej4tf"]
-sky_material = SubResource("ProceduralSkyMaterial_tbcdj")
-
-[sub_resource type="Environment" id="Environment_0hilk"]
-background_mode = 2
-sky = SubResource("Sky_ej4tf")
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_wr8iv"]
 
@@ -33,9 +25,10 @@ roughness = 0.75
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.551937, -0.786055, 0.278357, 0, 0.333807, 0.942641, -0.833886, -0.520279, 0.18424, 0, 20, 0)
+shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_0hilk")
+environment = ExtResource("1_cq4me")
 camera_attributes = SubResource("CameraAttributesPractical_wr8iv")
 
 [node name="LevelGeometry" type="Node3D" parent="."]

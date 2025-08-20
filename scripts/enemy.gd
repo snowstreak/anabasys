@@ -13,6 +13,8 @@ var player_in_earshot_close: bool
 var player_in_sight_far: bool
 var player_in_sight_close: bool
 
+var awareness = 0.0
+
 @onready var navigation_agent = $NavigationAgent3D
 @onready var patrol_timer = $PatrolTimer
 
@@ -40,7 +42,8 @@ func _process(delta: float) -> void:
 			pass
 		EnemyState.HUNTING:
 			pass
-	pass
+	if awareness >= 10.0:
+		enemy_state = EnemyState.INVESTIGATING
 
 func check_for_player():
 	pass
@@ -68,46 +71,4 @@ func _on_hearing_far_body_exited(body: Node3D) -> void:
 	if body.is_in_group("Player"):
 		player_in_earshot_far = false
 		print("Far hearing exited")
-	pass # Replace with function body.
-
-
-func _on_hearing_close_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Player"):
-		player_in_earshot_close = true
-		print("Close hearing entered")
-	pass # Replace with function body.
-
-
-func _on_hearing_close_body_exited(body: Node3D) -> void:
-	if body.is_in_group("Player"):
-		player_in_earshot_close = false
-		print("Close hearing exited")
-	pass # Replace with function body.
-
-
-func _on_sight_close_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Player"):
-		player_in_sight_close = true
-		print("Close sight entered")
-	pass # Replace with function body.
-
-
-func _on_sight_close_body_exited(body: Node3D) -> void:
-	if body.is_in_group("Player"):
-		player_in_sight_close = false
-		print("Close sight exited")
-	pass # Replace with function body.
-
-
-func _on_sight_far_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Player"):
-		player_in_sight_far = true
-		print("Far sight entered")
-	pass # Replace with function body.
-
-
-func _on_sight_far_body_exited(body: Node3D) -> void:
-	if body.is_in_group("Player"):
-		player_in_sight_far = true
-		print("Far sight exited")
 	pass # Replace with function body.

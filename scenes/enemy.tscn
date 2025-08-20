@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://derq2b4fl0jsp"]
+[gd_scene load_steps=12 format=3 uid="uid://derq2b4fl0jsp"]
 
 [ext_resource type="Script" uid="uid://mc20h1httb7a" path="res://scripts/enemy.gd" id="1_4ra3w"]
 [ext_resource type="Shape3D" uid="uid://cemxqht4gubix" path="res://resources/shapes/enemy_collision.tres" id="2_5uy6h"]
@@ -12,21 +12,26 @@ material = SubResource("StandardMaterial3D_g2equ")
 radius = 0.4
 height = 1.8
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_g2equ"]
-radius = 22.9117
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_tbcdj"]
-radius = 9.53936
+radius = 2.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4ra3w"]
+radius = 8.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g2equ"]
+radius = 14.0
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ej4tf"]
-points = PackedVector3Array(0, 0, 0, 6.5, -1, -8, -6.5, -1, -8, 6.5, 1, -8, -6.5, 1, -8)
+points = PackedVector3Array(0, 0, 0, 3, -0.5, -4, -3, -0.5, -4, 3, 0.5, -4, -3, 0.5, -4)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_tbcdj"]
-points = PackedVector3Array(0, 0, 0, 13, -2, -16, -13, -2, -16, 13, 2, -16, -13, 2, -16)
+points = PackedVector3Array(0, 0, 0, 6, -1, -8, -6, -1, -8, 6, 1, -8, -6, 1, -8)
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("waypoints")]
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_5uy6h"]
+points = PackedVector3Array(0, 0, 0, 12, -2, -16, -12, -2, -16, 12, 2, -16, -12, 2, -16)
+
+[node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_4ra3w")
-waypoints = [NodePath(""), NodePath("")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = ExtResource("2_5uy6h")
@@ -47,15 +52,20 @@ mesh = SubResource("CapsuleMesh_tbcdj")
 wait_time = 2.0
 one_shot = true
 
-[node name="HearingFar" type="Area3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HearingFar"]
-shape = SubResource("SphereShape3D_g2equ")
-
 [node name="HearingClose" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HearingClose"]
 shape = SubResource("SphereShape3D_tbcdj")
+
+[node name="HearingMid" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HearingMid"]
+shape = SubResource("SphereShape3D_4ra3w")
+
+[node name="HearingFar" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HearingFar"]
+shape = SubResource("SphereShape3D_g2equ")
 
 [node name="SightClose" type="Area3D" parent="."]
 
@@ -63,20 +73,29 @@ shape = SubResource("SphereShape3D_tbcdj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.710529, 0)
 shape = SubResource("ConvexPolygonShape3D_ej4tf")
 
+[node name="SightMid" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SightMid"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.710529, 0)
+shape = SubResource("ConvexPolygonShape3D_tbcdj")
+
 [node name="SightFar" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SightFar"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.710529, 0)
-shape = SubResource("ConvexPolygonShape3D_tbcdj")
+shape = SubResource("ConvexPolygonShape3D_5uy6h")
 
 [node name="enemy_boy" parent="." instance=ExtResource("3_c4w8v")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -0.900067, 0)
 
+[node name="Head" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662041, 0)
+
 [connection signal="timeout" from="PatrolTimer" to="." method="_on_patrol_timer_timeout"]
-[connection signal="body_entered" from="HearingFar" to="." method="_on_hearing_far_body_entered"]
-[connection signal="body_exited" from="HearingFar" to="." method="_on_hearing_far_body_exited"]
 [connection signal="body_entered" from="HearingClose" to="." method="_on_hearing_close_body_entered"]
 [connection signal="body_exited" from="HearingClose" to="." method="_on_hearing_close_body_exited"]
+[connection signal="body_entered" from="HearingFar" to="." method="_on_hearing_far_body_entered"]
+[connection signal="body_exited" from="HearingFar" to="." method="_on_hearing_far_body_exited"]
 [connection signal="body_entered" from="SightClose" to="." method="_on_sight_close_body_entered"]
 [connection signal="body_exited" from="SightClose" to="." method="_on_sight_close_body_exited"]
 [connection signal="body_entered" from="SightFar" to="." method="_on_sight_far_body_entered"]

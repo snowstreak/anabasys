@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3 uid="uid://gfq6tjefpfbp"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tbcdj"]
+
+[sub_resource type="Sky" id="Sky_ej4tf"]
+sky_material = SubResource("ProceduralSkyMaterial_tbcdj")
+
+[sub_resource type="Environment" id="Environment_0hilk"]
+background_mode = 2
+sky = SubResource("Sky_ej4tf")
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_wr8iv"]
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_0hilk")
+camera_attributes = SubResource("CameraAttributesPractical_wr8iv")

@@ -579,7 +579,7 @@ use_collision = true
 material = SubResource("StandardMaterial3D_jhx03")
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.63066, 2.76225, -5.11533)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.49695, 2.76225, -5.11533)
 radial_segments = 16
 rings = 16
 material = ExtResource("8_o8fc1")
