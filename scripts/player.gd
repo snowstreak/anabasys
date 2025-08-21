@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+@export var enemy_node: Node3D
+
 # region Constants
 
 # Movement
@@ -74,7 +76,8 @@ var gravity = BASE_GRAVITY
 var is_jumping_from_floor = false # Flag to prevent time_walked update during jump
 
 # Light
-var light_level: float
+var light_level
+var visibility
 
 # UI
 var fade_duration = 0.2
@@ -90,14 +93,13 @@ var fade_duration = 0.2
 @onready var camera = $Head/Camera3D
 @onready var knife = $Head/Camera3D/Knife
 @onready var footstep_sound = $FootstepSound
-@onready var light_detector = $LightDetect
+@onready var light_detector = $Head/LightDetect
 
 # UI
 @onready var movement_status_label = $"../UI/MovementStatus"
 @onready var standing_message_label = $"../UI/StandingMessage"
 @onready var vignette = $"../UI/Vignette"
 @onready var play_guide = $"../UI/PlayGuide"
-@onready var seen_eye = $"../UI/Seen"
 
 # Testing
 @onready var limbo_bar = $"../LevelGeometry/LimboBar"
@@ -119,8 +121,6 @@ func _ready():
 	# limbo_bar.position.y = limbo_height + 1
 
 	player_collision.shape.height = STANDING_HEIGHT
-
-	_show_game_title(2.0)
 
 	vignette.modulate.a = 0
 
@@ -236,6 +236,13 @@ func _process(delta: float) -> void:
 	var current_footstep_phase = _footstep(time_walked)
 	if prev_footstep_phase > 0.025 and current_footstep_phase <= 0.025:
 		footstep_sound.play()
+		if enemy_node.player_in_earshot_far:
+			if player_state == PlayerState.CROUCHING:
+				print("crouch step")
+			elif player_state == PlayerState.STANDING:
+				print("stand step")
+			elif player_state == PlayerState.SPRINTING:
+				print("sprint step")
 	prev_footstep_phase = current_footstep_phase
 
 	# Handle camera FOV changes (visual)
@@ -266,8 +273,6 @@ func _process(delta: float) -> void:
 		PlayerState.STANDING:
 			movement_status_label.text = "Walking"
 			crouched = false
-		_: # Default case for any other state (shouldn't happen with enum)
-			movement_status_label.text = "Error"
 
 	# TODO health - tied to ui, losing health
 	# TODO UI - health, vis, space above indicator, taking damage indicator, directional "seen" indicator, basic main manu
@@ -329,8 +334,19 @@ func _physics_process(delta: float) -> void:
 		if time_walked > 1000.0:
 			time_walked = fmod(time_walked, bob_period)
 
-		light_level = light_detector.light_level
-		vis_label.text = str(snapped(light_level * 100, 1))
+		light_level = snapped(light_detector.light_level * 100, 1) # cca 12-24
+
+		if light_level <= 12:
+			visibility = "0/3"
+		elif light_level > 16 and light_level <= 20:
+			visibility = "1/3"
+		elif light_level > 20 and light_level <= 24:
+			visibility = "2/3"
+		elif light_level > 24:
+			visibility = "3/3"
+
+		vis_label.text = visibility
+		# vis_label.text = str(light_level)
 		
 		move_and_slide()
 
@@ -376,12 +392,6 @@ func _show_stand_error_message(msg: String, duration: float):
 func _show_permanent_stand_error_message(msg: String):
 	standing_message_label.text = msg
 	standing_message_label.show()
-
-func _show_game_title(duration: float):
-	pass
-	#$"../UI/GameTitle".show()
-	#await get_tree().create_timer(duration).timeout
-	#$"../UI/GameTitle".hide()
 
 func fade_in():
 	var tween = get_tree().create_tween()

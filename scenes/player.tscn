@@ -180,8 +180,8 @@ shadow_mesh = SubResource("ArrayMesh_qlg0r")
 radius = 0.36
 height = 1.78
 
-[sub_resource type="Animation" id="Animation_tuyoq"]
-resource_name = "light_on"
+[sub_resource type="Animation" id="Animation_smehm"]
+length = 0.001
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -189,9 +189,9 @@ tracks/0/path = NodePath("Head/Camera3D/Glow:light_energy")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0.4, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.333333)
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.4, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
 }
 
 [sub_resource type="Animation" id="Animation_fjrip"]
@@ -208,8 +208,8 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.266667)
 }
 
-[sub_resource type="Animation" id="Animation_smehm"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "light_on"
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -217,9 +217,9 @@ tracks/0/path = NodePath("Head/Camera3D/Glow:light_energy")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0.4, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0.4, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.333333)
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ur7pv"]
@@ -261,6 +261,9 @@ light_energy = 0.4
 light_specular = 2.0
 omni_range = 3.89847
 
+[node name="LightDetect" parent="Head" instance=ExtResource("5_ur7pv")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -0.74731, 0)
+
 [node name="PlayerCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = ExtResource("3_fjrip")
@@ -273,10 +276,6 @@ target_position = Vector3(0, 0, 0)
 [node name="FootstepSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_smehm")
 volume_db = -25.0
-
-[node name="LightDetect" parent="." instance=ExtResource("5_ur7pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375022, 0)
-visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

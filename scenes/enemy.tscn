@@ -92,11 +92,5 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -0.
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662041, 0)
 
 [connection signal="timeout" from="PatrolTimer" to="." method="_on_patrol_timer_timeout"]
-[connection signal="body_entered" from="HearingClose" to="." method="_on_hearing_close_body_entered"]
-[connection signal="body_exited" from="HearingClose" to="." method="_on_hearing_close_body_exited"]
 [connection signal="body_entered" from="HearingFar" to="." method="_on_hearing_far_body_entered"]
 [connection signal="body_exited" from="HearingFar" to="." method="_on_hearing_far_body_exited"]
-[connection signal="body_entered" from="SightClose" to="." method="_on_sight_close_body_entered"]
-[connection signal="body_exited" from="SightClose" to="." method="_on_sight_close_body_exited"]
-[connection signal="body_entered" from="SightFar" to="." method="_on_sight_far_body_entered"]
-[connection signal="body_exited" from="SightFar" to="." method="_on_sight_far_body_exited"]

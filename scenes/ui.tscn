@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b4l6baaubryux"]
+[gd_scene load_steps=12 format=3 uid="uid://b4l6baaubryux"]
 
 [ext_resource type="Texture2D" uid="uid://c1p6od2eqi7tv" path="res://resources/ui/textures/vignette.png" id="1_gdt2y"]
 [ext_resource type="Texture2D" uid="uid://jdvhbwh8tanj" path="res://resources/ui/textures/crosshair.png" id="2_wm3ai"]
@@ -12,10 +12,6 @@ font_size = 32
 [sub_resource type="LabelSettings" id="LabelSettings_210s6"]
 font = ExtResource("3_8dubc")
 font_size = 34
-
-[sub_resource type="LabelSettings" id="LabelSettings_5qvs7"]
-font = ExtResource("3_8dubc")
-font_size = 65
 
 [sub_resource type="LabelSettings" id="LabelSettings_qbchm"]
 font = ExtResource("3_8dubc")
@@ -80,16 +76,6 @@ label_settings = SubResource("LabelSettings_210s6")
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="GameTitle" type="Label" parent="."]
-offset_left = 34.0
-offset_top = 29.0
-offset_right = 1247.0
-offset_bottom = 176.0
-text = "skeleton game"
-label_settings = SubResource("LabelSettings_5qvs7")
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="PlayGuide" type="Label" parent="."]
 offset_left = 14.0
 offset_top = 563.0
@@ -114,26 +100,14 @@ horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="VisibilityTesting" type="Label" parent="."]
-offset_left = 10.0
-offset_top = 323.0
-offset_right = 89.0
-offset_bottom = 386.0
+offset_left = 14.0
+offset_top = 321.0
+offset_right = 93.0
+offset_bottom = 384.0
 text = "VIS"
 label_settings = SubResource("LabelSettings_sbw1o")
 horizontal_alignment = 2
 vertical_alignment = 1
-
-[node name="VisibilityTesting2" type="Label" parent="."]
-anchors_preset = -1
-anchor_right = 2.257
-anchor_bottom = 1.301
-offset_left = 94.0
-offset_top = 319.0
-offset_right = -2584.96
-offset_bottom = -488.72
-text = "%
-"
-label_settings = SubResource("LabelSettings_sbw1o")
 
 [node name="Seen" type="Label" parent="."]
 visible = false
@@ -147,10 +121,9 @@ horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="VisibilityLabel" type="Label" parent="."]
-offset_left = 8.0
-offset_top = 298.0
-offset_right = 97.0
-offset_bottom = 357.0
-text = "Visibility:
-"
+offset_left = 10.0
+offset_top = 286.0
+offset_right = 142.0
+offset_bottom = 345.0
+text = "Visibility level"
 label_settings = SubResource("LabelSettings_4gq6d")
