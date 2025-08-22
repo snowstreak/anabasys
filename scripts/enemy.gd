@@ -11,6 +11,8 @@ var wp_index: int
 var player
 
 var player_in_earshot_far: bool
+var player_in_earshot_mid: bool
+var player_in_earshot_close: bool
 
 var awareness = 0.0
 
@@ -24,16 +26,23 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if awareness >= 10.0:
-		enemy_state = EnemyState.INVESTIGATING
-	elif awareness >= 30.0:
+	print(awareness)
+
+	if awareness >= 30.0:
 		enemy_state = EnemyState.HUNTING
+	elif awareness >= 10.0:
+		enemy_state = EnemyState.INVESTIGATING
+	
+	if awareness > 50.0:
+		awareness = 50.0
+
+	check_for_player()
 
 	match enemy_state:
 		EnemyState.PATROLLING:
 			if navigation_agent.is_navigation_finished():
-				enemy_state = EnemyState.WAITING
 				patrol_timer.start()
+				enemy_state = EnemyState.WAITING
 				return
 			move_towards_point(delta, patrol_speed)
 			pass
@@ -58,19 +67,13 @@ func move_towards_point(delta, speed):
 	face_direction(delta, target_position)
 	velocity = direction * speed
 	move_and_slide()
-	if player_in_earshot_far:
-		check_for_player()
-		# awareness rises when player makes a step
-
+		
 func check_for_player():
 	var space_state = get_world_3d().direct_space_state
 	var result = space_state.intersect_ray(PhysicsRayQueryParameters3D.create($Head.global_position, player.get_node("Head/Camera3D").global_position, 1, [self]))
 	if result.size() > 0:
 		if result["collider"].is_in_group("Player"):
-			if player_in_earshot_far:
-				if !result["collider"].crouched:
-					enemy_state = EnemyState.HUNTING
-					#print("enemy on the prowl")
+			pass # direct line to player
 
 func face_direction(delta, direction: Vector3):
 	look_at(Vector3(direction.x, global_position.y, direction.z), Vector3.UP)
@@ -82,18 +85,34 @@ func _on_patrol_timer_timeout() -> void:
 	if wp_index > waypoints.size() - 1:
 		wp_index = 0
 	navigation_agent.set_target_position(waypoints[wp_index].global_position)
-	pass # Replace with function body.
 
 
 func _on_hearing_far_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Player"):
 		player_in_earshot_far = true
-		#print("Far hearing entered")
-	pass # Replace with function body.
-
+		print("Far hearing entered")
 
 func _on_hearing_far_body_exited(body: Node3D) -> void:
 	if body.is_in_group("Player"):
 		player_in_earshot_far = false
-		#print("Far hearing exited")
-	pass # Replace with function body.
+		print("Far hearing exited")
+
+func _on_hearing_mid_body_entered(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		player_in_earshot_mid = true
+		print("Mid hearing entered")
+
+func _on_hearing_mid_body_exited(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		player_in_earshot_mid = false
+		print("Mid hearing exited")
+
+func _on_hearing_close_body_entered(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		player_in_earshot_close = true
+		print("Close hearing entered")
+
+func _on_hearing_close_body_exited(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		player_in_earshot_close = false
+		print("Close hearing exited")

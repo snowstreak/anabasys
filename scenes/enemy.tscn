@@ -13,13 +13,13 @@ radius = 0.4
 height = 1.8
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tbcdj"]
-radius = 2.0
+radius = 3.95863
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4ra3w"]
-radius = 8.0
+radius = 22.5999
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g2equ"]
-radius = 14.0
+radius = 33.6766
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ej4tf"]
 points = PackedVector3Array(0, 0, 0, 3, -0.5, -4, -3, -0.5, -4, 3, 0.5, -4, -3, 0.5, -4)
@@ -92,5 +92,9 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -0.
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662041, 0)
 
 [connection signal="timeout" from="PatrolTimer" to="." method="_on_patrol_timer_timeout"]
+[connection signal="body_entered" from="HearingClose" to="." method="_on_hearing_close_body_entered"]
+[connection signal="body_exited" from="HearingClose" to="." method="_on_hearing_close_body_exited"]
+[connection signal="body_entered" from="HearingMid" to="." method="_on_hearing_mid_body_entered"]
+[connection signal="body_exited" from="HearingMid" to="." method="_on_hearing_mid_body_exited"]
 [connection signal="body_entered" from="HearingFar" to="." method="_on_hearing_far_body_entered"]
 [connection signal="body_exited" from="HearingFar" to="." method="_on_hearing_far_body_exited"]

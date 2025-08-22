@@ -57,6 +57,8 @@ var crouched: bool
 
 # region Variables
 
+var hearing_distance_mult: float
+
 # Testing
 # var limbo_height = 
 var is_noclipping = false
@@ -232,17 +234,24 @@ func _process(delta: float) -> void:
 	# Apply head bobbing effect (visual)
 	camera.transform.origin = _headbob(time_walked)
 
+	if enemy_node.player_in_earshot_close:
+		hearing_distance_mult = 2.0
+	elif enemy_node.player_in_earshot_mid:
+		hearing_distance_mult = 1.0
+	elif enemy_node.player_in_earshot_far:
+		hearing_distance_mult = 0.5
+	
 	# Footstep sound triggering (audio)
 	var current_footstep_phase = _footstep(time_walked)
 	if prev_footstep_phase > 0.025 and current_footstep_phase <= 0.025:
 		footstep_sound.play()
 		if enemy_node.player_in_earshot_far:
 			if player_state == PlayerState.CROUCHING:
-				print("crouch step")
+				enemy_node.awareness += 1.0 * hearing_distance_mult
 			elif player_state == PlayerState.STANDING:
-				print("stand step")
+				enemy_node.awareness += 5.0 * hearing_distance_mult
 			elif player_state == PlayerState.SPRINTING:
-				print("sprint step")
+				enemy_node.awareness += 10.0 * hearing_distance_mult
 	prev_footstep_phase = current_footstep_phase
 
 	# Handle camera FOV changes (visual)

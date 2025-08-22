@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b8auq8l6py1fg"]
+[gd_scene load_steps=11 format=3 uid="uid://b8auq8l6py1fg"]
 
 [ext_resource type="Environment" uid="uid://c6wgjj2s2htl8" path="res://resources/environments/night_env.tres" id="1_4kmhl"]
 [ext_resource type="PackedScene" uid="uid://cbj5alr2lgw7x" path="res://scenes/player.tscn" id="1_ph3nu"]
@@ -18,6 +18,10 @@ metallic = 0.4
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0epgs"]
 albedo_color = Color(0, 0.530833, 0.65, 1)
 roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cq4me"]
+albedo_color = Color(0.0728426, 0.0728426, 0.0728426, 1)
+metallic = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4kmhl"]
 emission_enabled = true
@@ -80,6 +84,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05499, 2.22011, 14.6686)
 use_collision = true
 size = Vector3(1, 2, 18.5516)
 
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="LevelGeometry/NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0954, 2.69536, 9.63674)
+use_collision = true
+radius = 0.090332
+height = 5.61804
+material = SubResource("StandardMaterial3D_cq4me")
+
 [node name="OmniLight3D" type="OmniLight3D" parent="LevelGeometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0954, 5.19139, 9.63674)
 light_energy = 1.75
@@ -91,6 +102,8 @@ omni_attenuation = 0.2
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="LevelGeometry/OmniLight3D"]
 radius = 0.4
+radial_segments = 24
+rings = 12
 material = SubResource("StandardMaterial3D_4kmhl")
 
 [node name="Player" parent="." node_paths=PackedStringArray("enemy_node") instance=ExtResource("1_ph3nu")]
