@@ -1,5 +1,7 @@
 extends CharacterBody3D
+var _initial_head_local_origin: Vector3
 
+# region Export
 @export var enemy_node: Node3D
 
 # region Constants
@@ -8,17 +10,17 @@ extends CharacterBody3D
 const WALK_SPEED = 3.5
 const SPRINT_SPEED = 5.5
 const CROUCH_SPEED = 2.4
-const JUMP_VELOCITY = 7.2 # can jump 1.2m, can't 1.3
+const JUMP_VELOCITY = 4.0 # can jump 1.2m, can't 1.3
 const MAX_STEP_HEIGHT = 0.3 # irrelevant I think ?
 const BASE_TIME_WALKED = 0.0 # declaration
 const GROUND_DECEL_TIME = 10.0
 const AIR_DECEL_TIME = 8.0
 
 # World
-const BASE_GRAVITY = 24
+const BASE_GRAVITY = 9.8
 
 # Camera and Mouse
-const SENSITIVITY = 0.0028
+const SENSITIVITY = 0.001
 
 # Head Bobbing
 const BASE_BOB_FREQUENCY = 3.5
@@ -31,7 +33,7 @@ const SWAY_IDLE_FREQ = 0.75 / 4
 const SWAY_IDLE_AMP = 0.02 * 1.2
 const BASE_SWAY_TIME = 0.0
 
-# Heights
+# Height
 const STANDING_HEIGHT = 1.8
 const CROUCH_HEIGHT = 1
 const STANDING_EYE_HEIGHT = 1.7
@@ -51,13 +53,20 @@ Esc to exit
 N to noclip"
 
 enum PlayerState {STANDING, CROUCHING, SPRINTING}
+enum Leaning {LEFT, RIGHT, NO}
 var player_state = PlayerState.STANDING
+var leaning
+var lean = 0
+
 var glowing: bool
 var crouched: bool
 
 # region Variables
 
 var hearing_distance_mult: float
+var light_level_mult: float
+var player_state_mult = 1.0
+var _seen_timer_started = false
 
 # Testing
 # var limbo_height = 
@@ -78,8 +87,9 @@ var gravity = BASE_GRAVITY
 var is_jumping_from_floor = false # Flag to prevent time_walked update during jump
 
 # Light
-var light_level
+var light_value: float
 var visibility
+var light_level: int
 
 # UI
 var fade_duration = 0.2
@@ -96,6 +106,8 @@ var fade_duration = 0.2
 @onready var knife = $Head/Camera3D/Knife
 @onready var footstep_sound = $FootstepSound
 @onready var light_detector = $Head/LightDetect
+@onready var seen_timer: Timer = $SeenTimer
+@onready var lean_ray = $LeanRay
 
 # UI
 @onready var movement_status_label = $"../UI/MovementStatus"
@@ -104,12 +116,12 @@ var fade_duration = 0.2
 @onready var play_guide = $"../UI/PlayGuide"
 
 # Testing
-@onready var limbo_bar = $"../LevelGeometry/LimboBar"
-@onready var shade_box = $"../LevelGeometry/ShadeBox"
+#@onready var limbo_bar = $"../LevelGeometry/LimboBar"
+#@onready var shade_box = $"../LevelGeometry/ShadeBox"
 @onready var vis_label = $"../UI/VisibilityTesting"
 
 # Level
-@onready var glow_box = $"../LevelGeometry/GlowBox"
+#@onready var glow_box = $"../LevelGeometry/GlowBox"
 
 # endregion
 
@@ -117,14 +129,16 @@ var fade_duration = 0.2
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	_initial_head_local_origin = head.transform.origin
 
 	knife_base_pos = knife.position
-
-	# limbo_bar.position.y = limbo_height + 1
 
 	player_collision.shape.height = STANDING_HEIGHT
 
 	vignette.modulate.a = 0
+
+	seen_timer.timeout.connect(_seen_timer_tick)
 
 # endregion
 # region Input
@@ -164,10 +178,10 @@ func _process(delta: float) -> void:
 		# Noclip movement
 		var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 		var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-		var base_noclip_speed = WALK_SPEED * 2
+		var base_noclip_speed = WALK_SPEED * 4
 		var noclip_speed = base_noclip_speed
 		if Input.is_action_pressed("sprint"):
-			noclip_speed *= 2
+			noclip_speed *= 3
 
 		# Handle vertical movement with jump and crouch
 		if Input.is_action_pressed("jump"):
@@ -180,6 +194,21 @@ func _process(delta: float) -> void:
 			direction = direction.normalized()
 
 		global_transform.origin += direction * noclip_speed * delta # Directly update position
+
+	if Input.is_action_pressed("lean_left"):
+		#Vleaning = Leaning.LEFT
+		lean = -1
+	elif Input.is_action_pressed("lean_right"):
+		#leaning = Leaning.RIGHT
+		lean = 1
+	else:
+		#leaning = Leaning.NO
+		lean = 0
+
+	if Input.is_action_just_released("lean_left") or Input.is_action_just_released("lean_right"):
+		#leaning = Leaning.NO
+		lean = 0
+
 
 	# Handle sprinting.
 	# if the player is pressing the sprint button and not crouching and moving, set the state to sprinting
@@ -210,7 +239,7 @@ func _process(delta: float) -> void:
 			$AnimationPlayer.play("light_off")
 		else:
 			$AnimationPlayer.play("light_on")
-		glowing = !glowing
+		glowing = not glowing
 
 	# Update player properties based on state (visual/audio parameters)
 	match player_state:
@@ -218,6 +247,7 @@ func _process(delta: float) -> void:
 			# bob_frequency = BASE_BOB_FREQUENCY
 			bob_amplitude = BASE_BOB_AMPLITUDE
 			head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
+			player_state_mult = 1.0
 		PlayerState.CROUCHING:
 			# bob_frequency = BASE_BOB_FREQUENCY * 0.7 # Adjust bobbing for crouch
 			bob_amplitude = CROUCH_BOB_AMPLITUDE # Adjust bobbing for crouch
@@ -226,10 +256,12 @@ func _process(delta: float) -> void:
 				_show_permanent_stand_error_message("No space above to stand up")
 			else:
 				standing_message_label.hide()
+			player_state_mult = 0.5
 		PlayerState.SPRINTING:
 			# bob_frequency = BASE_BOB_FREQUENCY * 1.2 # Adjust bobbing for sprint
 			bob_amplitude = SPRINT_BOB_APLITUDE
 			head.transform.origin.y = lerpf(head.transform.origin.y, STANDING_EYE_HEIGHT, delta * 10)
+			player_state_mult = 1.2
 
 	# Apply head bobbing effect (visual)
 	camera.transform.origin = _headbob(time_walked)
@@ -247,12 +279,42 @@ func _process(delta: float) -> void:
 		footstep_sound.play()
 		if enemy_node.player_in_earshot_far:
 			if player_state == PlayerState.CROUCHING:
-				enemy_node.awareness += 1.0 * hearing_distance_mult
+				enemy_node.awareness += 2.0 * hearing_distance_mult
 			elif player_state == PlayerState.STANDING:
-				enemy_node.awareness += 5.0 * hearing_distance_mult
-			elif player_state == PlayerState.SPRINTING:
 				enemy_node.awareness += 10.0 * hearing_distance_mult
+			elif player_state == PlayerState.SPRINTING:
+				enemy_node.awareness += 20.0 * hearing_distance_mult
 	prev_footstep_phase = current_footstep_phase
+
+	light_value = snapped(light_detector.detector_light_value * 100, 1)
+
+	# when in sight, awareness raises every X time by a value based on visibility and crouching state
+
+	var player_visible = enemy_node.player_in_sight_far or enemy_node.player_in_sight_mid or enemy_node.player_in_sight_close
+	if player_visible and not _seen_timer_started:
+		seen_timer.start()
+		_seen_timer_started = true
+	elif not player_visible and _seen_timer_started:
+		seen_timer.stop()
+		_seen_timer_started = false
+	# else:
+	# 	print("player cant be seen")
+
+	if light_value <= 12:
+		visibility = "0/3" # 0
+		light_level = 0
+	elif light_value > 16 and light_value <= 20:
+		visibility = "1/3" # 3
+		light_level = 1
+	elif light_value > 20 and light_value <= 24:
+		visibility = "2/3" # 6
+		light_level = 2
+	elif light_value > 24:
+		visibility = "3/3" # 10
+		light_level = 3
+
+	#vis_label.text = visibility
+	vis_label.text = str(light_level)
 
 	# Handle camera FOV changes (visual)
 	var target_fov = BASE_FOV
@@ -343,19 +405,45 @@ func _physics_process(delta: float) -> void:
 		if time_walked > 1000.0:
 			time_walked = fmod(time_walked, bob_period)
 
-		light_level = snapped(light_detector.light_level * 100, 1) # cca 12-24
+		# match leaning:
+		# 	Leaning.LEFT:
+		# 		var target_origin_left = _initial_head_local_origin + head.transform.basis.x * -0.5
+		# 		head.transform.origin = head.transform.origin.lerp(target_origin_left, delta * 10)
+		# 	Leaning.RIGHT:
+		# 		var target_origin_right = _initial_head_local_origin + head.transform.basis.x * 0.5
+		# 		head.transform.origin = head.transform.origin.lerp(target_origin_right, delta * 10)
+		# 	Leaning.NO:
+		# 		head.transform.origin = head.transform.origin.lerp(_initial_head_local_origin, delta * 10)
 
-		if light_level <= 12:
-			visibility = "0/3"
-		elif light_level > 16 and light_level <= 20:
-			visibility = "1/3"
-		elif light_level > 20 and light_level <= 24:
-			visibility = "2/3"
-		elif light_level > 24:
-			visibility = "3/3"
+		var lean_offset_amount = 0.5
+		var target_head_position = _initial_head_local_origin
+		var target_lean_ray_position = Vector3.ZERO
 
-		vis_label.text = visibility
-		# vis_label.text = str(light_level)
+		if lean == -1: # Lean left
+			var lean_direction = - head.transform.basis.x # Left relative to head's orientation
+			target_lean_ray_position = lean_direction * lean_offset_amount
+			$LeanRay.target_position = target_lean_ray_position
+			if $LeanRay.is_colliding():
+				lean_offset_amount = $LeanRay.global_transform.origin.distance_to($LeanRay.get_collision_point()) - 0.3
+				target_lean_ray_position = lean_direction * lean_offset_amount
+			target_head_position = _initial_head_local_origin + lean_direction * lean_offset_amount
+			camera.rotation.z = lerp(camera.rotation.z, deg_to_rad(5), 5 * delta)
+		elif lean == 1: # Lean right
+			var lean_direction = head.transform.basis.x # Right relative to head's orientation
+			target_lean_ray_position = lean_direction * lean_offset_amount
+			$LeanRay.target_position = target_lean_ray_position
+			if $LeanRay.is_colliding():
+				lean_offset_amount = $LeanRay.global_transform.origin.distance_to($LeanRay.get_collision_point()) - 0.3
+				target_lean_ray_position = lean_direction * lean_offset_amount
+			target_head_position = _initial_head_local_origin + lean_direction * lean_offset_amount
+			camera.rotation.z = lerp(camera.rotation.z, deg_to_rad(-5), 5 * delta)
+		else: # No lean
+			camera.rotation.z = lerp(camera.rotation.z, deg_to_rad(0), 5 * delta)
+			$LeanRay.target_position = Vector3.ZERO # Reset LeanRay position
+
+		if lean != 0:
+			current_speed -= 2
+		head.position = lerp(head.position, target_head_position, 5 * delta)
 		
 		move_and_slide()
 
@@ -415,6 +503,17 @@ func fade_out():
 	tween.play()
 	await tween.finished
 	tween.kill()
+
+func _seen_timer_tick() -> void:
+	if enemy_node.direct_line_to_player:
+		if light_level == 0:
+			enemy_node.awareness += 10.0 * player_state_mult
+		elif light_level == 1:
+			enemy_node.awareness += 20.0 * player_state_mult
+		elif light_level == 2:
+			enemy_node.awareness += 30.0 * player_state_mult
+		elif light_level == 3:
+			enemy_node.awareness += 50.0 * player_state_mult
 
 # endregion
 

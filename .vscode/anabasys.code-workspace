@@ -1,16 +1,15 @@
 {
 	"folders": [
 		{
+			"name": "anabasys",
 			"path": ".."
 		},
 		{
-			"path": "../../../Files/Obsidian/obsidian_vault/anabasys_notes"
-		},
-		{
+			"name": "Godot-Thief-Controller",
 			"path": "../../godot_projects/Godot-Thief-Controller"
 		}
 	],
 	"settings": {
-		"godotTools.editorPath.godot4": "d:\\Files\\Godot\\Godot_v4.4.1.exe"
+		"godotTools.editorPath.godot4": "d:\\Files\\Godot\\Godot_v4.5-stable_win64.exe"
 	}
 }

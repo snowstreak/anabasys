@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://derq2b4fl0jsp"]
+[gd_scene load_steps=13 format=3 uid="uid://derq2b4fl0jsp"]
 
 [ext_resource type="Script" uid="uid://mc20h1httb7a" path="res://scripts/enemy.gd" id="1_4ra3w"]
 [ext_resource type="Shape3D" uid="uid://cemxqht4gubix" path="res://resources/shapes/enemy_collision.tres" id="2_5uy6h"]
 [ext_resource type="PackedScene" uid="uid://jorxx2t2ucjc" path="res://resources/models/enemy_boy.glb" id="3_c4w8v"]
+[ext_resource type="PackedScene" uid="uid://mj2wppmoeadt" path="res://resources/models/Ch36_nonPBR.fbx" id="4_5uy6h"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g2equ"]
 albedo_color = Color(0.84, 0.1008, 0.1008, 1)
@@ -12,25 +13,26 @@ material = SubResource("StandardMaterial3D_g2equ")
 radius = 0.4
 height = 1.8
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_tbcdj"]
-radius = 3.95863
+[sub_resource type="SphereShape3D" id="SphereShape3D_g2equ"]
+radius = 33.6766
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4ra3w"]
 radius = 22.5999
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_g2equ"]
-radius = 33.6766
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ej4tf"]
-points = PackedVector3Array(0, 0, 0, 3, -0.5, -4, -3, -0.5, -4, 3, 0.5, -4, -3, 0.5, -4)
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_tbcdj"]
-points = PackedVector3Array(0, 0, 0, 6, -1, -8, -6, -1, -8, 6, 1, -8, -6, 1, -8)
+[sub_resource type="SphereShape3D" id="SphereShape3D_tbcdj"]
+radius = 3.95863
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_5uy6h"]
-points = PackedVector3Array(0, 0, 0, 12, -2, -16, -12, -2, -16, 12, 2, -16, -12, 2, -16)
+points = PackedVector3Array(0, 0, 0, 0, -1.3, 0, 16, -6, -32, -16, -6, -32, 16, 4.6, -32, -16, 4.6, -32)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_tbcdj"]
+points = PackedVector3Array(0, 0, 0, 0, -1.3, 0, 11.005, -4.5, -22, -11.005, -4.5, -22, 11.005, 3.2, -22, -11.005, 3.2, -22)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ej4tf"]
+points = PackedVector3Array(0, 0, 0, 0, -1.3, 0, 2.4, -2, -4.8, -2.4, -2, -4.8, 2.4, 0.7, -4.8, -2.4, 0.7, -4.8)
 
 [node name="Enemy" type="CharacterBody3D"]
+transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, 0, 0, 0)
 script = ExtResource("1_4ra3w")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -52,32 +54,23 @@ mesh = SubResource("CapsuleMesh_tbcdj")
 wait_time = 2.0
 one_shot = true
 
-[node name="HearingClose" type="Area3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HearingClose"]
-shape = SubResource("SphereShape3D_tbcdj")
-
-[node name="HearingMid" type="Area3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HearingMid"]
-shape = SubResource("SphereShape3D_4ra3w")
+[node name="AwarenessTimer" type="Timer" parent="."]
+wait_time = 0.5
 
 [node name="HearingFar" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HearingFar"]
 shape = SubResource("SphereShape3D_g2equ")
 
-[node name="SightClose" type="Area3D" parent="."]
+[node name="HearingMid" type="Area3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SightClose"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.710529, 0)
-shape = SubResource("ConvexPolygonShape3D_ej4tf")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HearingMid"]
+shape = SubResource("SphereShape3D_4ra3w")
 
-[node name="SightMid" type="Area3D" parent="."]
+[node name="HearingClose" type="Area3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SightMid"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.710529, 0)
-shape = SubResource("ConvexPolygonShape3D_tbcdj")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HearingClose"]
+shape = SubResource("SphereShape3D_tbcdj")
 
 [node name="SightFar" type="Area3D" parent="."]
 
@@ -85,16 +78,38 @@ shape = SubResource("ConvexPolygonShape3D_tbcdj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.710529, 0)
 shape = SubResource("ConvexPolygonShape3D_5uy6h")
 
+[node name="SightMid" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SightMid"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.710529, 0)
+shape = SubResource("ConvexPolygonShape3D_tbcdj")
+
+[node name="SightClose" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SightClose"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.710529, 0)
+shape = SubResource("ConvexPolygonShape3D_ej4tf")
+
 [node name="enemy_boy" parent="." instance=ExtResource("3_c4w8v")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -0.900067, 0)
+visible = false
 
 [node name="Head" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662041, 0)
 
+[node name="Ch36_nonPBR" parent="." instance=ExtResource("4_5uy6h")]
+transform = Transform3D(-1, 0, -8.7422784e-08, 0, 1, 0, 8.7422784e-08, 0, -1, 0, -0.9041901, 0)
+
 [connection signal="timeout" from="PatrolTimer" to="." method="_on_patrol_timer_timeout"]
-[connection signal="body_entered" from="HearingClose" to="." method="_on_hearing_close_body_entered"]
-[connection signal="body_exited" from="HearingClose" to="." method="_on_hearing_close_body_exited"]
-[connection signal="body_entered" from="HearingMid" to="." method="_on_hearing_mid_body_entered"]
-[connection signal="body_exited" from="HearingMid" to="." method="_on_hearing_mid_body_exited"]
 [connection signal="body_entered" from="HearingFar" to="." method="_on_hearing_far_body_entered"]
 [connection signal="body_exited" from="HearingFar" to="." method="_on_hearing_far_body_exited"]
+[connection signal="body_entered" from="HearingMid" to="." method="_on_hearing_mid_body_entered"]
+[connection signal="body_exited" from="HearingMid" to="." method="_on_hearing_mid_body_exited"]
+[connection signal="body_entered" from="HearingClose" to="." method="_on_hearing_close_body_entered"]
+[connection signal="body_exited" from="HearingClose" to="." method="_on_hearing_close_body_exited"]
+[connection signal="body_entered" from="SightFar" to="." method="_on_sight_far_body_entered"]
+[connection signal="body_exited" from="SightFar" to="." method="_on_sight_far_body_exited"]
+[connection signal="body_entered" from="SightMid" to="." method="_on_sight_mid_body_entered"]
+[connection signal="body_exited" from="SightMid" to="." method="_on_sight_mid_body_exited"]
+[connection signal="body_entered" from="SightClose" to="." method="_on_sight_close_body_entered"]
+[connection signal="body_exited" from="SightClose" to="." method="_on_sight_close_body_exited"]

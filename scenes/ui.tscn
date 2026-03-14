@@ -37,8 +37,8 @@ font_size = 22
 [node name="UI" type="CanvasLayer"]
 
 [node name="Vignette" type="TextureRect" parent="."]
-offset_right = 1280.0
-offset_bottom = 720.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 texture = ExtResource("1_gdt2y")
 
 [node name="DefaultCrosshair" type="TextureRect" parent="."]
@@ -58,10 +58,10 @@ texture = ExtResource("2_wm3ai")
 stretch_mode = 3
 
 [node name="MovementStatus" type="Label" parent="."]
-offset_left = 883.0
-offset_top = 663.0
-offset_right = 1262.0
-offset_bottom = 708.0
+offset_left = 1505.0
+offset_top = 1000.0
+offset_right = 1884.0
+offset_bottom = 1045.0
 text = "movement status"
 label_settings = SubResource("LabelSettings_feaue")
 horizontal_alignment = 2
@@ -77,10 +77,10 @@ horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="PlayGuide" type="Label" parent="."]
-offset_left = 14.0
-offset_top = 563.0
-offset_right = 139.0
-offset_bottom = 705.0
+offset_left = 20.0
+offset_top = 908.0
+offset_right = 145.0
+offset_bottom = 1050.0
 text = "WASD to WASD
 Space to jump
 Ctrl to crouch
@@ -90,20 +90,20 @@ label_settings = SubResource("LabelSettings_qbchm")
 vertical_alignment = 2
 
 [node name="placeholderHP" type="Label" parent="."]
-offset_left = 17.0
-offset_top = -158.0
-offset_right = 76.0
-offset_bottom = 273.0
+offset_left = 36.0
+offset_top = -159.0
+offset_right = 95.0
+offset_bottom = 272.0
 text = "HP 1"
 label_settings = SubResource("LabelSettings_gxgfo")
 horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="VisibilityTesting" type="Label" parent="."]
-offset_left = 14.0
-offset_top = 321.0
-offset_right = 93.0
-offset_bottom = 384.0
+offset_left = 52.0
+offset_top = 323.0
+offset_right = 131.0
+offset_bottom = 386.0
 text = "VIS"
 label_settings = SubResource("LabelSettings_sbw1o")
 horizontal_alignment = 2
@@ -121,9 +121,9 @@ horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="VisibilityLabel" type="Label" parent="."]
-offset_left = 10.0
-offset_top = 286.0
-offset_right = 142.0
-offset_bottom = 345.0
+offset_left = 25.0
+offset_top = 288.0
+offset_right = 157.0
+offset_bottom = 347.0
 text = "Visibility level"
 label_settings = SubResource("LabelSettings_4gq6d")

@@ -1,0 +1,176 @@
+[gd_scene load_steps=3 format=3 uid="uid://da37v17bysj4a"]
+
+[ext_resource type="PackedScene" uid="uid://derq2b4fl0jsp" path="res://scenes/enemy.tscn" id="1_x72jc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jyxuj"]
+albedo_color = Color(0.15069672, 0.30699965, 0.18835762, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Ground" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5844727)
+material_override = SubResource("StandardMaterial3D_jyxuj")
+use_collision = true
+size = Vector3(110, 0.001, 72.66504)
+
+[node name="Gate" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.699, 0, -1.488)
+
+[node name="Pillar1" type="CSGBox3D" parent="Gate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Fence" type="CSGBox3D" parent="Gate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16406631, 1.4580994, 1.4898572)
+size = Vector3(0.03125, 2.5664673, 2.647461)
+
+[node name="Pillar2" type="CSGBox3D" parent="Gate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.951)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Gate2" type="Node3D" parent="."]
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -38.909245, 0, -8.152613)
+
+[node name="Pillar1" type="CSGBox3D" parent="Gate2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Fence" type="CSGBox3D" parent="Gate2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16406631, 1.4580994, 1.4898572)
+size = Vector3(0.03125, 2.5664673, 2.647461)
+
+[node name="Pillar2" type="CSGBox3D" parent="Gate2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.951)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Gate3" type="Node3D" parent="."]
+transform = Transform3D(0, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, 0, -20.837816, 0, -8.464369)
+
+[node name="Pillar1" type="CSGBox3D" parent="Gate3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Fence" type="CSGBox3D" parent="Gate3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16406631, 1.4580994, 1.4898572)
+size = Vector3(0.03125, 2.5664673, 2.647461)
+
+[node name="Pillar2" type="CSGBox3D" parent="Gate3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.951)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Gate4" type="Node3D" parent="."]
+transform = Transform3D(0, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, 0, -13.398208, 0, -8.435156)
+
+[node name="Pillar1" type="CSGBox3D" parent="Gate4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Fence" type="CSGBox3D" parent="Gate4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16406631, 1.4580994, 1.4898572)
+size = Vector3(0.03125, 2.5664673, 2.647461)
+
+[node name="Pillar2" type="CSGBox3D" parent="Gate4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.951)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Gate5" type="Node3D" parent="."]
+transform = Transform3D(0, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, 0, -6.772604, 0, -3.0592403)
+
+[node name="Pillar1" type="CSGBox3D" parent="Gate5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Fence" type="CSGBox3D" parent="Gate5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16406631, 1.4580994, 1.4898572)
+size = Vector3(0.03125, 2.5664673, 2.647461)
+
+[node name="Pillar2" type="CSGBox3D" parent="Gate5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.951)
+size = Vector3(0.5, 3, 0.5)
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.961365, 1.2, 6)
+size = Vector3(22.07727, 2.4, 0.5)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.436104, 1.2, -3.1935577)
+size = Vector3(8.504272, 2.4, 0.5)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -55.165096, 1.2, -0.16889763)
+size = Vector3(30.71289, 2.4, 0.5)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -17.363981, 1.2, -14.290358)
+size = Vector3(11.898682, 2.4, 0.5)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -12.401949, 1.2, -17.412956)
+size = Vector3(28.83485, 2.4, 0.5)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.140272, 1.2, -17.36562)
+size = Vector3(28.74018, 2.4, 0.5)
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.317835, 1.2, -7.972539)
+size = Vector3(28.74018, 2.4, 0.5)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(-0.7071068, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, -0.7071068, -46.99273, 1.2, -23.587992)
+size = Vector3(23.38794, 2.4, 0.5)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(-0.70710665, 0, 0.7071069, 0, 1, 0, -0.7071069, 0, -0.70710665, -44.40297, 1.2, 25.968853)
+size = Vector3(30.71289, 2.4, 0.5)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 1.2, -6)
+size = Vector3(14, 2.4, 0.5)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.043648, 1.2, -19.97414)
+size = Vector3(33.03662, 2.4, 0.5)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.46038, 1.2, -31.818802)
+size = Vector3(34.641144, 2.4, 0.5)
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 6.3794074, 1.2000039, -21.114466)
+size = Vector3(30.46503, 2.4, 0.5)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.731716, 1.2, -8.648855)
+size = Vector3(26.69786, 2.4, 0.5)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Walls"]
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -44.573334, 1.1999986, -14.259557)
+size = Vector3(16.706543, 2.4, 0.5)
+
+[node name="Tomb" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.9484, 2.6930876, -20.158876)
+size = Vector3(11.644882, 5.529907, 8.891022)
+
+[node name="Tomb2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.54175, 1.7202635, -8.261892)
+size = Vector3(7.692203, 3.584259, 5.027668)
+
+[node name="Tomb3" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -8.206528, 2.024394, -26.473087)
+size = Vector3(7.9012003, 4.19252, 5.027668)
+
+[node name="Ossuary" type="CSGBox3D" parent="."]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -25.559645, 4.185, 2.6672363)
+size = Vector3(15.914078, 8.369629, 13.304199)
+
+[node name="Tower" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.472427, 4.93678, -20.035316)
+radius = 3.2822266
+height = 10.0078125
+sides = 16
+
+[node name="Enemy" parent="." instance=ExtResource("1_x72jc")]
+transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, -27.556362, 0.9183358, 16.047861)

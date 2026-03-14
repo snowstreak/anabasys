@@ -1,6 +1,8 @@
 extends Node3D
 
-var light_level: float
+var detector_light_value: float
+
+# region Process
 
 func _process(_delta) -> void:
 	var mesh_instance := get_node("MeshInstance3D")
@@ -12,8 +14,10 @@ func _process(_delta) -> void:
 			var pixel = image.get_pixel(x, y)
 			var light_value = (pixel.r + pixel.g + pixel.b) / 3.0
 			floats.append(light_value)
-	light_level = average(floats)
+	detector_light_value = average(floats)
 	pass
+
+# region Functions
 
 func average(numbers: Array) -> float:
 	var sum = 0.0
